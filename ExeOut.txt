@@ -1,0 +1,10 @@
+Programming by Eric Chauvin.
+Version date: 5/10/2022
+
+Did not accept a socket.
+Opened a socket.
+Before opening socket.
+SocketWin server got socket.
+No socket ready to accept.
+Closed test socket.
+End of main app.
