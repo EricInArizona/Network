@@ -1,0 +1,8 @@
+buildfile	\Eric\Main\NetSrv\BuildProj.bat
+executablefile	\Eric\Main\NetSrv\NetSrv.exe
+projectdirectory	\Eric\Main\NetSrv
+recentfile1	\Eric\Main\NetSrv\MainApp.h
+recentfile2	\Eric\Main\Docs\Notes.txt
+recentfile3	\Eric\Main\NetSrv\MainApp.cpp
+recentfile4	\Eric\Main\Sockets\SocketsWin.h
+recentfile5	\Eric\Main\Sockets\SocketsWin.cpp
