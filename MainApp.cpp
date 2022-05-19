@@ -71,7 +71,7 @@ Signals::setupIllegalOpSignal();
 Signals::setupBadMemSignal();
 
 
-testSockets();
+runServer();
 
 
 mainIO.appendChars( "End of main app.\n" );
@@ -108,13 +108,12 @@ catch( ... )
 }
 
 
-void MainApp::testSockets( void )
+void MainApp::runServer( void )
 {
-
 CharBuf showBuf;
 
 /*
-Uint64 testSocket = socketsWin.openClient(
+Uint64 testSocket = SocketsApi::openClient(
                      "www.durangoherald.com",
                      "443", showBuf );
 if( testSocket == 0 )
@@ -127,30 +126,8 @@ if( testSocket == 0 )
   }
 */
 
-Uint64 testSocket = socketsWin.openServer(
-                            "443", showBuf );
-if( testSocket == 0 )
-  {
-  mainIO.appendCharBuf( showBuf );
-  mainIO.appendChars(
-              "openServer returned zero.\n" );
 
+if( !server.startServer( "443" ))
   return;
-  }
 
-
-SocketCpp newConn = SocketsWin::acceptConnect(
-                         testSocket,
-                         showBuf );
-
-if( newConn == 0 )
-  {
-  mainIO.appendChars( "Did not accept a socket.\n" );
-  }
-
-mainIO.appendChars( "Opened a socket.\n" );
-mainIO.appendCharBuf( showBuf );
-
-socketsWin.closeSocket( testSocket );
-mainIO.appendChars( "Closed test socket.\n" );
 }

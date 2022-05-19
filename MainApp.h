@@ -21,7 +21,11 @@
 
 #include "../CppBase/BasicTypes.h"
 #include "../CppBase/FileIO.h"
-#include "../Sockets/SocketsWin.h"
+
+#include "../Sockets/Server.h"
+
+// Don't need this for Linux.
+#include "../Sockets/SocketsApiWin.h"
 
 
 
@@ -36,16 +40,16 @@ class MainApp
   // this app.  Also statistical and other data
   // is kept for the life of the app.
 
-  SocketsWin socketsWin;
-
+  SocketsApi socketsApi;
+  Server server;
   public:
   inline static const char* getVersionStr( void )
     {
-    return "5/10/2022";
+    return "5/15/2022";
     }
 
   // Int32 mainLoop( Int32 argc, char* argv[] );
   Int32 mainLoop( void );
-  void testSockets( void );
+  void runServer( void );
 
   };
