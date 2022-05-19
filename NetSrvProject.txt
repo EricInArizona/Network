@@ -4,5 +4,30 @@ projectdirectory	\Eric\Main\NetSrv
 recentfile1	\Eric\Main\NetSrv\MainApp.h
 recentfile2	\Eric\Main\Docs\Notes.txt
 recentfile3	\Eric\Main\NetSrv\MainApp.cpp
-recentfile4	\Eric\Main\Sockets\SocketsWin.h
-recentfile5	\Eric\Main\Sockets\SocketsWin.cpp
+recentfile4	\Eric\Main\Sockets\SrvClient.h
+recentfile5	\Eric\Main\Sockets\SrvClient.cpp
+recentfile10	\Eric\Main\NetSrv\SClientArray.h
+recentfile6	\Eric\Main\Sockets\SocketsApiWin.h
+recentfile11	\Eric\Main\NetSrv\SClientArray.cpp
+recentfile7	\Eric\Main\Sockets\SocketsApiWin.cpp
+recentfile12	\Eric\Main\NetSrv\SrvClPass.h
+recentfile8	\Eric\Main\Sockets\Server.h
+recentfile13	\Eric\Main\NetSrv\SrvClPass.cpp
+recentfile9	\Eric\Main\Sockets\Server.cpp
+recentfile14	
+recentfile15	
+recentfile16	
+recentfile17	
+recentfile18	
+recentfile19	
+recentfile20	
+recentfile21	
+recentfile22	
+recentfile23	
+recentfile24	
+recentfile25	
+recentfile26	
+recentfile27	
+recentfile28	
+recentfile29	
+recentfile30	
