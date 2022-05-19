@@ -12,7 +12,7 @@
 
 
 #include "../CppBase/BasicTypes.h"
-#include "../Sockets/SrvClient.h"
+#include "SrvClient.h"
 
 
 // A pass-through SrvClient.
@@ -21,6 +21,7 @@
 class SrvClPass: public SrvClient
   {
   private:
+  // SocketCpp clientSocket = 0;
 
   public:
   SrvClPass( void );
@@ -28,4 +29,3 @@ class SrvClPass: public SrvClient
   bool processData( void ) override;
 
   };
-

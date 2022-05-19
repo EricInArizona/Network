@@ -33,4 +33,3 @@ bool SrvClPass::processData( void )
 {
 return true;
 }
-

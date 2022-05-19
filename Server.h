@@ -12,22 +12,25 @@
 
 
 #include "../CppBase/BasicTypes.h"
+#include "../CppBase/CharBuf.h"
 #include "SrvClient.h"
 
 
-class SClientArray
+
+class Server
   {
   private:
   Int32 testForCopy = 123;
-  // An array of pointers to the base class.
-  SrvClient* sClientAr;
-  Int32 arraySize = 0;
-  // Int32 last = 0;
-
+  // There is one main server socket.
+  SocketCpp mainSocket = 0;
+  CharBuf showBuf;
 
   public:
-  SClientArray( void );
-  SClientArray( const SClientArray& in );
-  ~SClientArray( void );
+  Server( void );
+  Server( const Server &in );
+  ~Server( void );
+  bool startServer( const char* port );
+  void mainLoop( void );
+  // void addNewConnections( void );
 
   };
