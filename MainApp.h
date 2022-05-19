@@ -22,7 +22,7 @@
 #include "../CppBase/BasicTypes.h"
 #include "../CppBase/FileIO.h"
 
-#include "../Sockets/Server.h"
+#include "Server.h"
 
 // Don't need this for Linux.
 #include "../Sockets/SocketsApiWin.h"
