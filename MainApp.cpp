@@ -41,6 +41,11 @@ Int32 delay = 200; // milliseconds.
 const char* outFile =
                "\\Eric\\Main\\NetSrv\\ExeOut.txt";
 
+// If it's out of RAM and can't allocate the
+// memory for a new object then it throws an
+// exception.
+// set_new_handler()
+
 try
 {
 StIO::putS( "See output at:" );
