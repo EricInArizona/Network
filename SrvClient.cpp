@@ -10,12 +10,17 @@
 
 #include "SrvClient.h"
 #include "../CppBase/StIO.h"
+#include "../Sockets/SocketsApiWin.h"
+#include "../WinApi/TimeApiWin.h"
 
 
 
 SrvClient::SrvClient( void )
 {
 // All base class constructors are always called.
+
+TimeApi now;
+timeActive = now.getSeconds();
 
 StIO::putS( "SrvClient constructor called." );
 
@@ -45,6 +50,12 @@ throw showS;
 
 SrvClient::~SrvClient( void )
 {
+if( mainSocket != 0 )
+  {
+  SocketsApi::closeSocket( mainSocket );
+  mainSocket = 0;
+  }
+
 StIO::putS( "SrvClient destructor called." );
 }
 
@@ -58,7 +69,5 @@ mainSocket = toSet;
 
 bool SrvClient::processData( void )
 {
-// throw "Make processData() not in the base class.";
-
-return true;
+return false;
 }

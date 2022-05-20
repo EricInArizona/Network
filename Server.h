@@ -14,6 +14,7 @@
 #include "../CppBase/BasicTypes.h"
 #include "../CppBase/CharBuf.h"
 #include "SrvClient.h"
+#include "SClientArray.h"
 
 
 
@@ -24,6 +25,7 @@ class Server
   // There is one main server socket.
   SocketCpp mainSocket = 0;
   CharBuf showBuf;
+  SClientArray sClientAr;
 
   public:
   Server( void );

@@ -31,5 +31,10 @@ StIO::putS( "SrvClPass destructor called." );
 
 bool SrvClPass::processData( void )
 {
-return true;
+if( mainSocket == 0 )
+  return false;
+
+// false will close down this socket
+// in the destructor.
+return false;
 }

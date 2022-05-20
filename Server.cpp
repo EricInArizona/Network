@@ -77,37 +77,41 @@ void Server::mainLoop( void )
 {
 CharBuf fromCBuf;
 
+
 while( true )
   {
-  if( Signals::getControlCSignal())
+  for( Int32 count = 0; count < 3; count++ )
     {
-    StIO::putS( "Closing server on Ctrl-C." );
-    // close all current open sockets.
-    break;
-    }
+    if( Signals::getControlCSignal())
+      {
+      StIO::putS( "Closing server on Ctrl-C." );
 
-  fromCBuf.clear();
-  SocketCpp acceptedSock =
+      sClientAr.closeAllSockets();
+
+      SocketsApi::closeSocket( mainSocket );
+      StIO::putS( "Closed server." );
+      return;
+      }
+
+    fromCBuf.clear();
+    SocketCpp acceptedSock =
                  SocketsApi::acceptConnect(
                                   mainSocket,
                                   fromCBuf,
                                   showBuf );
 
-  if( acceptedSock == 0 )
-    {
-    // There is nothing new trying to connect now.
-    // Do this dynamically and adjust it to sleep
-    // more or less or none if it's busy.
-    Int32 milliSec = 1000;
-    Threads::sleep( milliSec );
-    continue;
+    if( acceptedSock != 0 )
+      sClientAr.addNewSocket( acceptedSocket );
+
     }
 
-  }
+  sClientAr.processData();
 
-// Close the server.
-SocketsApi::closeSocket( mainSocket );
-StIO::putS( "Closed server." );
+  // Do this dynamically and adjust it to sleep
+  // more or less or none if it's busy.
+  Int32 milliSec = 100;
+  Threads::sleep( milliSec );
+  }
 }
 
 
@@ -130,5 +134,3 @@ for( Int32 count = 0; count < max; count++ )
   }
 }
 */
-
-

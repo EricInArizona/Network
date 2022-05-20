@@ -22,11 +22,10 @@ class SrvClient
   {
   private:
   Int32 testForCopy = 123;
+
+  protected:
   SocketCpp mainSocket = 0; // Zero is disconnected.
   Int64 timeActive = 0;
-
-  // For classes derived from this class.
-  protected:
 
   public:
   SrvClient( void );

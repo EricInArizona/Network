@@ -13,21 +13,35 @@
 
 #include "../CppBase/BasicTypes.h"
 #include "SrvClient.h"
+#include "SrvClPoint.h"
+
+
+// This is oversimplified for a small server.
+// I would need indexes into something.
 
 
 class SClientArray
   {
   private:
   Int32 testForCopy = 123;
-  // An array of pointers to the base class.
-  SrvClient* sClientAr;
-  Int32 arraySize = 0;
-  // Int32 last = 0;
+  // A pointer to the starting point of the array.
+  SrvClPoint* sClPointAr;
 
+  // This will not grow on purpose.
+  const Int32 arraySize = 5;
+
+  // Make a stats object.
+  Int64 tooManyConnections = 0;
 
   public:
   SClientArray( void );
   SClientArray( const SClientArray& in );
   ~SClientArray( void );
+  bool addNewSocket( SocketCpp newSocket );
+  void closeAllSockets( void );
+  Int32 needsNewClient( void );
+  void addNewClientAt( Int32 where,
+                       SrvClient& newClient );
+  void processData( void );
 
   };
