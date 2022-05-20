@@ -13,25 +13,23 @@
 
 #include "../CppBase/BasicTypes.h"
 #include "../CppBase/CharBuf.h"
-#include "SrvClient.h"
-#include "SClientArray.h"
+#include "Server.h"
+#include "SrvClPass.h"
 
 
 
-class Server
+class ServerPass
   {
   private:
   Int32 testForCopy = 123;
-  // There is one main server socket.
-  SocketCpp mainSocket = 0;
-  CharBuf showBuf;
-  SClientArray sClientAr;
+  Server server;
 
   public:
-  Server( void );
-  Server( const Server &in );
-  ~Server( void );
+  ServerPass( void );
+  ServerPass( const ServerPass &in );
+  ~ServerPass( void );
   bool startServer( const char* port );
-  bool oneLoop( void );
+  void mainLoop( void );
 
   };
+

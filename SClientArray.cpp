@@ -85,11 +85,11 @@ for( Int32 count = 0; count < arraySize;
                                    count++ )
   {
   sClPointAr[count].mainSocket = 0;
-  if( sClPointAr[count].srvClClientP != nullptr )
+  if( sClPointAr[count].srvClientP != nullptr )
     {
     // The destructor closes the socket.
-    delete sClPointAr[count].srvClClientP;
-    sClPointAr[count].srvClClientP = nullptr;
+    delete sClPointAr[count].srvClientP;
+    sClPointAr[count].srvClientP = nullptr;
     }
   }
 }
@@ -104,7 +104,7 @@ for( Int32 count = 0; count < arraySize; count++ )
     {
     // A good socket has not been assigned a
     // client object yet.
-    if( sClPointAr[count].srvClClientP == nullptr )
+    if( sClPointAr[count].srvClientP == nullptr )
       return count;
 
     }
@@ -122,12 +122,12 @@ void SClientArray::addNewClientAt( Int32 where,
 // This takes ownership of the object, so it
 // is responsible for freeing it.
 
-if( sClPointAr[where].srvClClientP != nullptr )
+if( sClPointAr[where].srvClientP != nullptr )
   throw "Assigning a client to one that's there.";
 
 // Set the address of the new client.
-sClPointAr[where].srvClClientP = &newClient;
-sClPointAr[where].srvClClientP->setSocket(
+sClPointAr[where].srvClientP = &newClient;
+sClPointAr[where].srvClientP->setSocket(
                  sClPointAr[where].mainSocket );
 }
 
@@ -138,19 +138,19 @@ void SClientArray::processData( void )
 for( Int32 count = 0; count < arraySize;
                                    count++ )
   {
-  if( sClPointAr[count].srvClClientP != nullptr )
+  if( sClPointAr[count].srvClientP != nullptr )
     {
     if( sClPointAr[count].
-           srvClClientP->processData())
+           srvClientP->processData())
       continue;
 
     // Shut it down.  Closing the socket is
     // done in the destructor.
     sClPointAr[count].mainSocket = 0;
-    if( sClPointAr[count].srvClClientP != nullptr )
-      delete sClPointAr[count].srvClClientP;
+    if( sClPointAr[count].srvClientP != nullptr )
+      delete sClPointAr[count].srvClientP;
 
-    sClPointAr[count].srvClClientP = nullptr;
+    sClPointAr[count].srvClientP = nullptr;
     }
   }
 }

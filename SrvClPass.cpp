@@ -34,6 +34,10 @@ bool SrvClPass::processData( void )
 if( mainSocket == 0 )
   return false;
 
+// Is it active or not?
+// Close down inactive clients.
+//  inline void setTimeActive( Int64 setTo )
+
 // false will close down this socket
 // in the destructor.
 return false;

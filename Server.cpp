@@ -66,71 +66,48 @@ StIO::putCharBuf( showBuf );
 showBuf.clear();
 
 StIO::putS( "Server is listening." );
-
-mainLoop();
-
 return true;
 }
 
 
-void Server::mainLoop( void )
+bool Server::oneLoop( void )
 {
 CharBuf fromCBuf;
 
+// StartLoopTime = something
 
-while( true )
+for( Int32 count = 0; count < 3; count++ )
   {
-  for( Int32 count = 0; count < 3; count++ )
+  if( Signals::getControlCSignal())
     {
-    if( Signals::getControlCSignal())
-      {
-      StIO::putS( "Closing server on Ctrl-C." );
+    StIO::putS( "Closing server on Ctrl-C." );
 
-      sClientAr.closeAllSockets();
+    sClientAr.closeAllSockets();
 
-      SocketsApi::closeSocket( mainSocket );
-      StIO::putS( "Closed server." );
-      return;
-      }
+    SocketsApi::closeSocket( mainSocket );
+    StIO::putS( "Closed server." );
+    return false;
+    }
 
-    fromCBuf.clear();
-    SocketCpp acceptedSock =
+  fromCBuf.clear();
+  SocketCpp acceptedSock =
                  SocketsApi::acceptConnect(
                                   mainSocket,
                                   fromCBuf,
                                   showBuf );
 
-    if( acceptedSock != 0 )
-      sClientAr.addNewSocket( acceptedSocket );
-
-    }
-
-  sClientAr.processData();
-
-  // Do this dynamically and adjust it to sleep
-  // more or less or none if it's busy.
-  Int32 milliSec = 100;
-  Threads::sleep( milliSec );
-  }
-}
-
-
-
-/*
-void Server::addNewConnections( void )
-{
-// Add up to max new clients in one loop.
-const Int32 max = 20;
-for( Int32 count = 0; count < max; count++ )
-  {
-  SocketCpp acceptedSock =
-                 SocketsApi::acceptConnect(
-                                  mainSocket,
-                                  showBuf );
-
-  if( acceptedSock == 0 )
-    return;
+  if( acceptedSock != 0 )
+    sClientAr.addNewSocket( acceptedSock );
 
   }
+
+sClientAr.processData();
+
+// FinishLoopTime = something
+// Do this dynamically and adjust it to sleep
+// more or less or none if it's busy.
+//  Int32 milliSec = 100;
+//  Threads::sleep( milliSec );
+
+return true;
 }
-*/

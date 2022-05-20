@@ -22,8 +22,8 @@ class SrvClPoint
   protected:
 
   public:
-  SrvClient* srvClClientP = nullptr;
+  // This is 16 bytes.
+  SrvClient* srvClientP = nullptr;
   SocketCpp mainSocket = 0; // Zero is disconnected.
-  // Int64 timeActive = 0;
 
   };
