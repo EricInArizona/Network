@@ -30,8 +30,16 @@ rem file is going to.
 
 rem \Eric\Main\LinuxApi\*.cpp
 
+rem -Wno-cast-align
+rem SocketsApiWin.cpp has ugly casts in it.
+
+rem I don't care about being compatible with
+rem C++ 98.
+rem -Wno-c++98-compat-pedantic
+
 rem -lWs2_32.lib
 rem -lwsock32.lib
+
 C:\LLVM\bin\clang++ *.cpp \Eric\Main\CppBase\*.cpp \Eric\Main\Sockets\*.cpp \Eric\Main\CryptoBase\*.cpp \Eric\Main\WinApi\*.cpp -o NetSrv.exe -Weverything -Wno-c++98-compat-pedantic -ftrapv -Ofast -Wl,-MAP -Wl,-STACK:10000000 -lWs2_32.lib 2> Build.log
 
 rem Show macros:

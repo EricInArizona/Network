@@ -21,25 +21,11 @@
 #include "MainApp.h"
 
 
-// extern volatile Int32 gotSigFpe;
-
-/*
-void MainApp::checkSignals( void )
-{
-if( gotSigFpe > 0 )
-  throw "gotSigFpe > 0";
-
-}
-*/
-
-
 
 // int MainApp::mainLoop( int argc, char* argv[] )
 int MainApp::mainLoop( void )
 {
 Int32 delay = 200; // milliseconds.
-const char* outFile =
-               "\\Eric\\Main\\NetSrv\\ExeOut.txt";
 
 // If it's out of RAM and can't allocate the
 // memory for a new object then it throws an
@@ -48,20 +34,14 @@ const char* outFile =
 
 try
 {
-StIO::putS( "See output at:" );
-StIO::putS( outFile );
-
-
 // Throws an exception if things are not right.
 BasicTypes::thingsAreRight();
 
 
-mainIO.appendChars(
-            "Programming by Eric Chauvin.\n" );
-
-mainIO.appendChars( "Version date: " );
-mainIO.appendChars( getVersionStr() );
-mainIO.appendChars( "\n\n" );
+StIO::putS( "Programming by Eric Chauvin." );
+StIO::printF( "Version date: " );
+StIO::putS( getVersionStr() );
+StIO::printF( "\n" );
 
 // For Linux:
 // Int32 stackSize = SetStack::getSize();
@@ -79,10 +59,7 @@ Signals::setupBadMemSignal();
 runServer();
 
 
-mainIO.appendChars( "End of main app.\n" );
-
-//             mainIO.readAll( fileName );
-mainIO.writeAll( outFile );
+StIO::putS( "End of main app." );
 
 Threads::sleep( delay );
 
@@ -90,11 +67,8 @@ return 0;
 }
 catch( const char* in )
   {
-  mainIO.appendChars( "Exception in main loop.\n" );
-  mainIO.appendChars( in );
-  mainIO.appendChars( "\n" );
-  mainIO.writeAll( outFile );
-
+  StIO::putS( "Exception in main loop.\n" );
+  StIO::putS( in );
   Threads::sleep( delay );
   return 1;
   }
@@ -104,9 +78,7 @@ catch( ... )
   const char* in = "An unknown exception"
                    " happened in the main loop.\n";
 
-  mainIO.appendChars( in );
-  mainIO.writeAll( outFile );
-
+  StIO::putS( in );
   Threads::sleep( delay );
   return 1;
   }
@@ -115,24 +87,17 @@ catch( ... )
 
 void MainApp::runServer( void )
 {
-CharBuf showBuf;
-
 /*
-Uint64 testSocket = SocketsApi::openClient(
+Uint64 testSocket = SocketsApi::connectClient(
                      "www.durangoherald.com",
-                     "443", showBuf );
+                     "443" );
 if( testSocket == 0 )
-  {
-  mainIO.appendCharBuf( showBuf );
-  mainIO.appendChars(
-              "openClient returned zero.\n" );
 
-  return;
-  }
 */
 
 
 if( !server.startServer( "443" ))
   return;
 
+server.mainLoop();
 }
