@@ -12,10 +12,9 @@
 
 
 #include "../CppBase/BasicTypes.h"
-#include "../CppBase/CharBuf.h"
+// #include "../CppBase/CharBuf.h"
 #include "SrvClient.h"
 #include "SClientArray.h"
-
 
 
 class Server
@@ -24,7 +23,7 @@ class Server
   Int32 testForCopy = 123;
   // There is one main server socket.
   SocketCpp mainSocket = 0;
-  CharBuf showBuf;
+  // CharBuf showBuf;
   SClientArray sClientAr;
 
   public:

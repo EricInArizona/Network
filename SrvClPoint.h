@@ -15,6 +15,12 @@
 #include "SrvClient.h"
 
 
+// I don't care about being compatible with
+// C++ 98.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wc++98-compat-pedantic"
+
+
 class SrvClPoint
   {
   private:
@@ -27,3 +33,5 @@ class SrvClPoint
   SocketCpp mainSocket = 0; // Zero is disconnected.
 
   };
+
+#pragma clang diagnostic pop

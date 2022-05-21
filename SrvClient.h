@@ -18,6 +18,12 @@
 // socket.
 
 
+// I don't care about being compatible with
+// C++ 98.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wc++98-compat-pedantic"
+
+
 class SrvClient
   {
   private:
@@ -46,3 +52,5 @@ class SrvClient
     }
 
   };
+
+#pragma clang diagnostic pop

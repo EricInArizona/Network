@@ -20,6 +20,7 @@
 // I would need indexes into something.
 
 
+
 class SClientArray
   {
   private:

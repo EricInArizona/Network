@@ -10,6 +10,7 @@
 
 #include "ServerPass.h"
 #include "../CppBase/StIO.h"
+#include "../CppBase/Threads.h"
 
 
 ServerPass::ServerPass( void )
@@ -44,14 +45,22 @@ bool ServerPass::startServer( const char* port )
 return server.startServer( port );
 }
 
+
 void ServerPass::mainLoop( void )
 {
 while( true )
   {
+  // StartLoopTime = something
+
+  StIO::putS( "Top of mainLoop()." );
+
   if( !server.oneLoop() )
     return;
 
+  // FinishLoopTime = something
+  // Do this dynamically and adjust it to sleep
+  // more or less or none if it's busy.
+  Int32 milliSec = 1000;
+  Threads::sleep( milliSec );
   }
 }
-
-

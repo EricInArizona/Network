@@ -12,7 +12,7 @@
 
 
 #include "../CppBase/BasicTypes.h"
-#include "../CppBase/CharBuf.h"
+// #include "../CppBase/CharBuf.h"
 #include "Server.h"
 #include "SrvClPass.h"
 
@@ -32,4 +32,3 @@ class ServerPass
   void mainLoop( void );
 
   };
-

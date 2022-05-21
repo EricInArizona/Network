@@ -12,7 +12,7 @@
 #include "../Sockets/SocketsApiWin.h"
 // #include "SocketsApiLinux.h"
 #include "../CppBase/StIO.h"
-#include "../CppBase/Threads.h"
+// #include "../CppBase/Threads.h"
 #include "../WinApi/Signals.h"
 // #include "../LinuxApi/Signals.h"
 
@@ -52,29 +52,20 @@ bool Server::startServer( const char* port )
 {
 StIO::putS( "Starting server." );
 
-mainSocket = SocketsApi::openServer(
-                            port, showBuf );
+mainSocket = SocketsApi::openServer( port );
 
 if( mainSocket == 0 )
-  {
-  StIO::putCharBuf( showBuf );
-  showBuf.clear();
   return false;
-  }
-
-StIO::putCharBuf( showBuf );
-showBuf.clear();
 
 StIO::putS( "Server is listening." );
 return true;
 }
 
 
+
 bool Server::oneLoop( void )
 {
 CharBuf fromCBuf;
-
-// StartLoopTime = something
 
 for( Int32 count = 0; count < 3; count++ )
   {
@@ -93,21 +84,18 @@ for( Int32 count = 0; count < 3; count++ )
   SocketCpp acceptedSock =
                  SocketsApi::acceptConnect(
                                   mainSocket,
-                                  fromCBuf,
-                                  showBuf );
+                                  fromCBuf );
 
   if( acceptedSock != 0 )
+    {
     sClientAr.addNewSocket( acceptedSock );
-
+    StIO::putS( "Added new socket from:" );
+    StIO::putCharBuf( fromCBuf );
+    StIO::putS( "\n" );
+    }
   }
 
 sClientAr.processData();
-
-// FinishLoopTime = something
-// Do this dynamically and adjust it to sleep
-// more or less or none if it's busy.
-//  Int32 milliSec = 100;
-//  Threads::sleep( milliSec );
 
 return true;
 }
