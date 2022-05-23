@@ -15,6 +15,8 @@
 // #include "../CppBase/CharBuf.h"
 #include "SrvClient.h"
 #include "SClientArray.h"
+#include "../Sockets/SocketsApiWin.h"
+// #include "SocketsApiLinux.h"
 
 
 class Server
@@ -22,7 +24,7 @@ class Server
   private:
   Int32 testForCopy = 123;
   // There is one main server socket.
-  SocketCpp mainSocket = 0;
+  SocketCpp mainSocket = SocketsApi::InvalSock;
   // CharBuf showBuf;
   SClientArray sClientAr;
 

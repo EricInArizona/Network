@@ -9,8 +9,6 @@
 
 
 #include "Server.h"
-#include "../Sockets/SocketsApiWin.h"
-// #include "SocketsApiLinux.h"
 #include "../CppBase/StIO.h"
 // #include "../CppBase/Threads.h"
 #include "../WinApi/Signals.h"
@@ -20,14 +18,14 @@
 
 Server::Server( void )
 {
-mainSocket = 0;
+mainSocket = SocketsApi::InvalSock;
 }
 
 
 
 Server::Server( const Server& in )
 {
-mainSocket = 0;
+mainSocket = SocketsApi::InvalSock;
 
 // Make the compiler think the in value is
 // being used.
@@ -54,7 +52,7 @@ StIO::putS( "Starting server." );
 
 mainSocket = SocketsApi::openServer( port );
 
-if( mainSocket == 0 )
+if( mainSocket == SocketsApi::InvalSock )
   return false;
 
 StIO::putS( "Server is listening." );
@@ -86,7 +84,7 @@ for( Int32 count = 0; count < 3; count++ )
                                   mainSocket,
                                   fromCBuf );
 
-  if( acceptedSock != 0 )
+  if( acceptedSock != SocketsApi::InvalSock )
     {
     sClientAr.addNewSocket( acceptedSock );
     StIO::putS( "Added new socket from:" );
