@@ -46,14 +46,25 @@ Server::~Server( void )
 
 
 
+bool Server::addNewClient( SrvClient* toAdd )
+{
+return sClientAr.addNewClient( toAdd );
+}
+
+
 bool Server::startServer( const char* port )
 {
 StIO::putS( "Starting server." );
 
-mainSocket = SocketsApi::openServer( port );
+// "localhost"
+mainSocket = SocketsApi::openServer(
+                        "127.0.0.1",  port, true );
 
 if( mainSocket == SocketsApi::InvalSock )
+  {
+  StIO::putS( "Coule not start the server." );
   return false;
+  }
 
 StIO::putS( "Server is listening." );
 return true;
@@ -63,34 +74,16 @@ return true;
 
 bool Server::oneLoop( void )
 {
-CharBuf fromCBuf;
+// CharBuf fromCBuf;
 
-for( Int32 count = 0; count < 3; count++ )
+if( Signals::getControlCSignal())
   {
-  if( Signals::getControlCSignal())
-    {
-    StIO::putS( "Closing server on Ctrl-C." );
+  StIO::putS( "Closing server on Ctrl-C." );
+  sClientAr.closeAllSockets();
 
-    sClientAr.closeAllSockets();
-
-    SocketsApi::closeSocket( mainSocket );
-    StIO::putS( "Closed server." );
-    return false;
-    }
-
-  fromCBuf.clear();
-  SocketCpp acceptedSock =
-                 SocketsApi::acceptConnect(
-                                  mainSocket,
-                                  fromCBuf );
-
-  if( acceptedSock != SocketsApi::InvalSock )
-    {
-    sClientAr.addNewSocket( acceptedSock );
-    StIO::putS( "Added new socket from:" );
-    StIO::putCharBuf( fromCBuf );
-    StIO::putS( "\n" );
-    }
+  SocketsApi::closeSocket( mainSocket );
+  StIO::putS( "Closed server." );
+  return false;
   }
 
 sClientAr.processData();

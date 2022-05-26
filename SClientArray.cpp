@@ -43,10 +43,11 @@ delete[] sClPointAr;
 }
 
 
-
-bool SClientArray::addNewSocket(
-                          SocketCpp newSocket )
+bool SClientArray::addNewClient( SrvClient* toAdd )
 {
+// This becomes the owner of the object and
+// it has to delete it when it's done with it.
+
 // Something could just make a whole lot of
 // connections to your server and if you keep
 // allocating new space for more client objects
@@ -56,9 +57,9 @@ bool SClientArray::addNewSocket(
 for( Int32 count = 0; count < arraySize;
                                    count++ )
   {
-  if( sClPointAr[count].mainSocket == 0 )
+  if( sClPointAr[count].srvClientP == nullptr )
     {
-    sClPointAr[count].mainSocket = newSocket;
+    sClPointAr[count].srvClientP = toAdd;
     return true;
     }
   }
@@ -78,13 +79,11 @@ tooManyConnections++;
 return false;
 }
 
-
 void SClientArray::closeAllSockets( void )
 {
 for( Int32 count = 0; count < arraySize;
                                    count++ )
   {
-  sClPointAr[count].mainSocket = 0;
   if( sClPointAr[count].srvClientP != nullptr )
     {
     // The destructor closes the socket.
@@ -96,43 +95,6 @@ for( Int32 count = 0; count < arraySize;
 
 
 
-Int32 SClientArray::needsNewClient( void )
-{
-for( Int32 count = 0; count < arraySize; count++ )
-  {
-  if( sClPointAr[count].mainSocket != 0 )
-    {
-    // A good socket has not been assigned a
-    // client object yet.
-    if( sClPointAr[count].srvClientP == nullptr )
-      return count;
-
-    }
-  }
-
-return -1;
-}
-
-
-
-
-void SClientArray::addNewClientAt( Int32 where,
-                         SrvClient& newClient )
-{
-// This takes ownership of the object, so it
-// is responsible for freeing it.
-
-if( sClPointAr[where].srvClientP != nullptr )
-  throw "Assigning a client to one that's there.";
-
-// Set the address of the new client.
-sClPointAr[where].srvClientP = &newClient;
-sClPointAr[where].srvClientP->setSocket(
-                 sClPointAr[where].mainSocket );
-}
-
-
-
 void SClientArray::processData( void )
 {
 for( Int32 count = 0; count < arraySize;
@@ -140,17 +102,15 @@ for( Int32 count = 0; count < arraySize;
   {
   if( sClPointAr[count].srvClientP != nullptr )
     {
-    if( sClPointAr[count].
+    if( !sClPointAr[count].
            srvClientP->processData())
-      continue;
-
-    // Shut it down.  Closing the socket is
-    // done in the destructor.
-    sClPointAr[count].mainSocket = 0;
-    if( sClPointAr[count].srvClientP != nullptr )
+      {
+      // If processData returned false,
+      // shut it down.  Closing the socket is
+      // done in the destructor.
       delete sClPointAr[count].srvClientP;
-
-    sClPointAr[count].srvClientP = nullptr;
+      sClPointAr[count].srvClientP = nullptr;
+      }
     }
   }
 }

@@ -48,6 +48,8 @@ return server.startServer( port );
 
 void ServerPass::mainLoop( void )
 {
+CharBuf fromCBuf;
+
 while( true )
   {
   // StartLoopTime = something
@@ -56,6 +58,25 @@ while( true )
 
   if( !server.oneLoop() )
     return;
+
+  for( Int32 count = 0; count < 3; count++ )
+    {
+    fromCBuf.clear();
+    SocketCpp acceptedSock =
+                 SocketsApi::acceptConnect(
+                          server.getMainSocket(),
+                          fromCBuf );
+
+    if( acceptedSock != SocketsApi::InvalSock )
+      {
+      server.addNewClient( new SrvClPass(
+                                  acceptedSock ));
+
+      StIO::putS( "Added new SrvClPass:" );
+      StIO::putCharBuf( fromCBuf );
+      StIO::putS( "\n" );
+      }
+    }
 
   // FinishLoopTime = something
   // Do this dynamically and adjust it to sleep

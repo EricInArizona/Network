@@ -23,7 +23,13 @@ TimeApi now;
 timeActive = now.getSeconds();
 
 StIO::putS( "SrvClient constructor called." );
+}
 
+
+SrvClient::SrvClient( SocketCpp useSocket )
+{
+mainSocket = useSocket;
+StIO::putS( "SrvClient useSocket constructor." );
 }
 
 
@@ -50,24 +56,18 @@ throw showS;
 
 SrvClient::~SrvClient( void )
 {
-if( mainSocket != 0 )
+if( mainSocket != SocketsApi::InvalSock )
   {
   SocketsApi::closeSocket( mainSocket );
-  mainSocket = 0;
+  mainSocket = SocketsApi::InvalSock;
   }
 
 StIO::putS( "SrvClient destructor called." );
 }
 
 
-void SrvClient::setSocket( const SocketCpp toSet )
-{
-mainSocket = toSet;
-}
-
-
 
 bool SrvClient::processData( void )
 {
-return false;
+return true;
 }

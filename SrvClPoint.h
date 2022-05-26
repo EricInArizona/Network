@@ -13,12 +13,9 @@
 
 #include "../CppBase/BasicTypes.h"
 #include "SrvClient.h"
+#include "../Sockets/SocketsApiWin.h"
 
 
-// I don't care about being compatible with
-// C++ 98.
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wc++98-compat-pedantic"
 
 
 class SrvClPoint
@@ -28,10 +25,6 @@ class SrvClPoint
   protected:
 
   public:
-  // This is 16 bytes.
   SrvClient* srvClientP = nullptr;
-  SocketCpp mainSocket = 0; // Zero is disconnected.
 
   };
-
-#pragma clang diagnostic pop

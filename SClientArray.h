@@ -16,11 +16,6 @@
 #include "SrvClPoint.h"
 
 
-// This is oversimplified for a small server.
-// I would need indexes into something.
-
-
-
 class SClientArray
   {
   private:
@@ -28,7 +23,7 @@ class SClientArray
   // A pointer to the starting point of the array.
   SrvClPoint* sClPointAr;
 
-  // This will not grow on purpose.
+  // This will not grow.  On purpose.
   const Int32 arraySize = 5;
 
   // Make a stats object.
@@ -38,11 +33,8 @@ class SClientArray
   SClientArray( void );
   SClientArray( const SClientArray& in );
   ~SClientArray( void );
-  bool addNewSocket( SocketCpp newSocket );
+  bool addNewClient( SrvClient* toAdd );
   void closeAllSockets( void );
-  Int32 needsNewClient( void );
-  void addNewClientAt( Int32 where,
-                       SrvClient& newClient );
   void processData( void );
 
   };

@@ -20,6 +20,14 @@ StIO::putS( "SrvClPass constructor called." );
 }
 
 
+
+SrvClPass::SrvClPass( SocketCpp useSocket )
+{
+mainSocket = useSocket;
+StIO::putS( "SrvClPass useSocket constructor." );
+}
+
+
 // SrvClPass::SrvClPass( const SrvClPass& in )
 
 
@@ -31,14 +39,14 @@ StIO::putS( "SrvClPass destructor called." );
 
 bool SrvClPass::processData( void )
 {
-if( mainSocket == 0 )
+if( mainSocket == SocketsApi::InvalSock )
   return false;
 
 // Is it active or not?
 // Close down inactive clients.
 //  inline void setTimeActive( Int64 setTo )
 
-// false will close down this socket
-// in the destructor.
-return false;
+// false will close down this socket.
+return true;
 }
+

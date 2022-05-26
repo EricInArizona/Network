@@ -1,7 +1,6 @@
 // Copyright Eric Chauvin 2022
 
 
-
 // This is licensed under the GNU General
 // Public License (GPL).  It is the
 // same license that Linux has.
@@ -12,16 +11,12 @@
 
 
 #include "../CppBase/BasicTypes.h"
+#include "../Sockets/SocketsApiWin.h"
 
 
 // This is the server's view of one client
 // socket.
 
-
-// I don't care about being compatible with
-// C++ 98.
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wc++98-compat-pedantic"
 
 
 class SrvClient
@@ -30,20 +25,17 @@ class SrvClient
   Int32 testForCopy = 123;
 
   protected:
-  SocketCpp mainSocket = 0; // Zero is disconnected.
+  SrvClient( void );
+  SocketCpp mainSocket = SocketsApi::InvalSock;
   Int64 timeActive = 0;
 
   public:
-  SrvClient( void );
+  SrvClient( SocketCpp useSocket );
   SrvClient( const SrvClient &in );
   virtual ~SrvClient( void );
-
-  // An Interface would have nothing but pure
-  // virtual functions in the class.
   // virtual void pureVirtualFunction() = 0;
   // virtual void pureVirtualFunction() const = 0;
 
-  void setSocket( const SocketCpp toSet );
   virtual bool processData( void );
 
   inline void setTimeActive( Int64 setTo )
@@ -52,5 +44,3 @@ class SrvClient
     }
 
   };
-
-#pragma clang diagnostic pop

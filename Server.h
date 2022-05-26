@@ -25,13 +25,19 @@ class Server
   Int32 testForCopy = 123;
   // There is one main server socket.
   SocketCpp mainSocket = SocketsApi::InvalSock;
-  // CharBuf showBuf;
   SClientArray sClientAr;
 
   public:
   Server( void );
   Server( const Server &in );
   ~Server( void );
+
+  inline SocketCpp getMainSocket( void )
+    {
+    return mainSocket;
+    }
+
+  bool addNewClient( SrvClient* toAdd );
   bool startServer( const char* port );
   bool oneLoop( void );
 

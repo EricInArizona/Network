@@ -14,3 +14,20 @@ recentfile6	\Eric\Main\NetSrv\SClientArray.h
 recentfile7	\Eric\Main\NetSrv\SClientArray.cpp
 recentfile8	\Eric\Main\NetSrv\SrvClPass.h
 recentfile9	\Eric\Main\NetSrv\SrvClPass.cpp
+recentfile14	\Eric\Main\NetSrv\SrvClient.h
+recentfile15	\Eric\Main\NetSrv\SrvClient.cpp
+recentfile16	
+recentfile17	
+recentfile18	
+recentfile19	
+recentfile20	
+recentfile21	
+recentfile22	
+recentfile23	
+recentfile24	
+recentfile25	
+recentfile26	
+recentfile27	
+recentfile28	
+recentfile29	
+recentfile30	

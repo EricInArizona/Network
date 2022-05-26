@@ -23,8 +23,11 @@ class SrvClPass: public SrvClient
   private:
   // SocketCpp clientSocket = 0;
 
-  public:
+  protected:
   SrvClPass( void );
+
+  public:
+  SrvClPass( SocketCpp useSocket );
   ~SrvClPass( void ) override;
   bool processData( void ) override;
 
