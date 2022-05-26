@@ -46,7 +46,22 @@ if( mainSocket == SocketsApi::InvalSock )
 // Close down inactive clients.
 //  inline void setTimeActive( Int64 setTo )
 
+CharBuf recBuf;
+if( !SocketsApi::receiveBuf( mainSocket, recBuf ))
+  {
+  // StIO::putS( "receiveBuf returned false." );
+  return true; // Not an error.
+  }
+
+if( recBuf.getLast() == 0 )
+  {
+  // StIO::putS( "receiveBuf has nothing in it." );
+  return true; // Not an error.
+  }
+
+StIO::putS( "Received data:" );
+StIO::putCharBuf( recBuf );
+
 // false will close down this socket.
 return true;
 }
-
