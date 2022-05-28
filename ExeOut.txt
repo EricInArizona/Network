@@ -1,2 +1,0 @@
-Programming by Eric Chauvin.
-End of main app.
