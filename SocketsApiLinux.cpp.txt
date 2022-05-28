@@ -1,0 +1,4 @@
+// Copyright Eric Chauvin 2022
+
+===== Fix this up for Linux.
+ Copy it from SocketsApiWin.cpp and then fix it up.

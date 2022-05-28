@@ -11,20 +11,13 @@
 #pragma once
 
 
-#include "../CppBase/BasicTypes.h"
-#include "SrvClient.h"
-#include "SocketsApi.h"
+// A good tutorial:
+// https://beej.us/guide/bgnet/html/
 
 
+// The SocketCpp type is in BasicTypes.h
 
 
-class SrvClPoint
-  {
-  private:
-
-  protected:
-
-  public:
-  SrvClient* srvClientP = nullptr;
-
-  };
+// Set this for Windows or Linux.
+#include "SocketsApiWin.h"
+// #include "SocketsApiLinux.h"

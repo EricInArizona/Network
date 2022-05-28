@@ -15,8 +15,7 @@
 // #include "../CppBase/CharBuf.h"
 #include "SrvClient.h"
 #include "SClientArray.h"
-#include "../Sockets/SocketsApiWin.h"
-// #include "SocketsApiLinux.h"
+#include "SocketsApi.h"
 
 
 class Server

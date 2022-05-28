@@ -59,6 +59,7 @@ if( recBuf.getLast() == 0 )
   return true; // Not an error.
   }
 
+// ==== So send the data on to the client socket.
 StIO::putS( "Received data:" );
 StIO::putCharBuf( recBuf );
 

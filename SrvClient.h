@@ -11,7 +11,7 @@
 
 
 #include "../CppBase/BasicTypes.h"
-#include "../Sockets/SocketsApiWin.h"
+#include "SocketsApi.h"
 
 
 // This is the server's view of one client

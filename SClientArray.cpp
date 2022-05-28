@@ -9,8 +9,7 @@
 
 #include "SClientArray.h"
 #include "../CppBase/Casting.h"
-#include "../Sockets/SocketsApiWin.h"
-// #include "SocketsApiLinux.h"
+#include "SocketsApi.h"
 
 
 SClientArray::SClientArray( void )

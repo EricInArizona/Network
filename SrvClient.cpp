@@ -10,7 +10,7 @@
 
 #include "SrvClient.h"
 #include "../CppBase/StIO.h"
-#include "../Sockets/SocketsApiWin.h"
+#include "SocketsApi.h"
 #include "../WinApi/TimeApiWin.h"
 
 

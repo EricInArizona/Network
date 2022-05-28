@@ -59,7 +59,9 @@ while( true )
   if( !server.oneLoop() )
     return;
 
-  for( Int32 count = 0; count < 3; count++ )
+  // accept() until there are no more sockets
+  // to accept.
+  for( Int32 count = 0; count < 100; count++ )
     {
     fromCBuf.clear();
     SocketCpp acceptedSock =
@@ -67,15 +69,18 @@ while( true )
                           server.getMainSocket(),
                           fromCBuf );
 
-    if( acceptedSock != SocketsApi::InvalSock )
-      {
-      server.addNewClient( new SrvClPass(
-                                  acceptedSock ));
+    // No more sockets to accept.
+    if( acceptedSock == SocketsApi::InvalSock )
+      break;
 
-      StIO::putS( "Added new SrvClPass:" );
-      StIO::putCharBuf( fromCBuf );
-      StIO::putS( "\n" );
-      }
+    // Add the kind of SrvClient socket I
+    // want to add.
+    server.addNewClient( new SrvClPass(
+                                 acceptedSock ));
+
+    StIO::putS( "Added new SrvClPass:" );
+    StIO::putCharBuf( fromCBuf );
+    StIO::putS( "\n" );
     }
 
   // FinishLoopTime = something
@@ -85,3 +90,5 @@ while( true )
   Threads::sleep( milliSec );
   }
 }
+
+
