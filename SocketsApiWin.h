@@ -22,6 +22,7 @@
 
 #include "../CppBase/BasicTypes.h"
 #include "../CppBase/CharBuf.h"
+#include "../CppBase/CircleBuf.h"
 // #include "../CppBase/Str.h"
 // #include "../CppBase/RangeC.h"
 
@@ -69,6 +70,6 @@ class SocketsApi
                         const CharBuf& sendBuf );
 
   static bool receiveBuf( const SocketCpp recSock,
-                          CharBuf& recCharBuf );
+                          CharBuf& recvBuf );
 
   };

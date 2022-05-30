@@ -54,22 +54,6 @@
 
 
 
-extern "C" {
-
-
-static const Int32 SocketReceiveBufSize =
-              1024 * 1024 * 1; // 1 Megabyte.
-
-static char SocketReceiveBuf[SocketReceiveBufSize] =
-                               { '0','1','2' };
-
-
-  } // extern "C"
-
-
-
-
-
 // I hate to have to put a #define statement
 // into any of my code.  But if you need to
 // include the Windows.h file then
@@ -856,10 +840,22 @@ if( sendToSock == INVALID_SOCKET )
   }
 
 const Int32 howMany = sendBuf.getLast();
+
+CharArray cArray;
+sendBuf.copyToCharArray( cArray );
+
+char* buffer = new char[Casting::i64ToU64(
+                                  howMany)];
+
+cArray.copyToCharPt( buffer, howMany );
+
 Int32 result = send( sendToSock,
-                     sendBuf.getBufPoint(),
+                     buffer,
                      howMany,
                      0 );
+
+// I presume send() is done with the buffer.
+delete[] buffer;
 
 if( result == SOCKET_ERROR )
   {
@@ -880,7 +876,7 @@ return result;
 
 bool SocketsApi::receiveBuf(
                    const Uint64 recSock,
-                   CharBuf& recCharBuf )
+                   CharBuf& recvBuf )
 {
 if( recSock == InvalSock )
   {
@@ -888,15 +884,17 @@ if( recSock == InvalSock )
   return false;
   }
 
-// See at the top:
-// static const Int32 SocketReceiveBufSize =
-// static char SocketReceiveBuf[SocketReceiveBufSize]
+const Uint64 bufSize = 1024 * 1024;
+char* buffer = new char[bufSize];
+//Casting::i64ToU64(   howMany)];
 
-Int32 result = recv( recSock, SocketReceiveBuf,
-                     SocketReceiveBufSize, 0 );
+Int32 result = recv( recSock, buffer,
+                     bufSize, 0 );
 
 if( result == 0 )
   {
+  delete[] buffer;
+
   // The connection was _gracefully_ closed.
   StIO::putS( "receiveBuf() connection closed." );
   return false;
@@ -904,6 +902,8 @@ if( result == 0 )
 
 if( result < 0 )
   {
+  delete[] buffer;
+
   Int32 error = WSAGetLastError();
   // EAGAIN or EWOULDBLOCK
   if( error == WSAEWOULDBLOCK )
@@ -919,8 +919,9 @@ if( result < 0 )
   }
 
 for( Int32 count = 0; count < result; count++ )
-  recCharBuf.appendChar( SocketReceiveBuf[count] );
+  recvBuf.appendChar( buffer[count] );
 
+delete[] buffer;
 return true;
 }
 
