@@ -69,7 +69,8 @@ class SocketsApi
   static Int32 sendBuf( const SocketCpp sendToSock,
                         const CharBuf& sendBuf );
 
-  static bool receiveBuf( const SocketCpp recSock,
-                          CharBuf& recvBuf );
+  static bool receiveBuf(
+                     const SocketCpp recSock,
+                     CharBuf& recvBuf );
 
   };

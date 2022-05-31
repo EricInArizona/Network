@@ -90,5 +90,3 @@ while( true )
   Threads::sleep( milliSec );
   }
 }
-
-

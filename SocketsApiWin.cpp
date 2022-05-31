@@ -54,6 +54,19 @@
 
 
 
+extern "C" {
+
+static const Int32 SocketReceiveBufSize =
+                                 1024 * 1024;
+static char SocketReceiveBuf[
+                        SocketReceiveBufSize];
+
+
+  } // extern "C"
+
+
+
+
 // I hate to have to put a #define statement
 // into any of my code.  But if you need to
 // include the Windows.h file then
@@ -874,54 +887,73 @@ return result;
 
 
 
+
 bool SocketsApi::receiveBuf(
                    const Uint64 recSock,
                    CharBuf& recvBuf )
 {
+// Make sure it is cleared because this tells
+// me how much data was received.  If any.
+recvBuf.clear();
+
 if( recSock == InvalSock )
   {
+  // This should not happen.
   StIO::putS( "receiveBuf() recSock is invalid." );
   return false;
   }
 
-const Uint64 bufSize = 1024 * 1024;
-char* buffer = new char[bufSize];
-//Casting::i64ToU64(   howMany)];
+// This gets called very often just to see if
+// data has come in, and it often returns
+// Would Block.  So the buffer
+// SocketReceiveBuf is allocated for the life
+// of the program.  SocketReceiveBuf is only
+// seen within this compilation unit.  I don't
+// want to allocate a large buffer many times
+// per second.  Also, it's a large buffer so
+// that it will read as much as possible each
+// time it reads with recv().
 
-Int32 result = recv( recSock, buffer,
-                     bufSize, 0 );
+Int32 result = recv( recSock, SocketReceiveBuf,
+                     SocketReceiveBufSize, 0 );
 
 if( result == 0 )
   {
-  delete[] buffer;
-
+  // Let this time out.
   // The connection was _gracefully_ closed.
+  // Define graceful.  Am I still receiving
+  // data from a system buffer?
   StIO::putS( "receiveBuf() connection closed." );
-  return false;
+  return true; // Not an error.
   }
 
 if( result < 0 )
   {
-  delete[] buffer;
-
   Int32 error = WSAGetLastError();
-  // EAGAIN or EWOULDBLOCK
+
+  // if( (error == EWOULDBLOCK) ||
+      // (error == EAGAIN) )
   if( error == WSAEWOULDBLOCK )
     {
     // StIO::putS( "socket recv would block." );
-    return false; // Not an error.
+    return true; // Not an error.
     }
 
   StIO::putS( "socket recv error is: " );
   StIO::printFD( error );
   StIO::printF( "\n" );
-  return false;
+  // I want to let the client object close
+  // the socket and set its socket value.
+  // closeSocket( recSock )
+  return false; // Close this socket.
   }
 
-for( Int32 count = 0; count < result; count++ )
-  recvBuf.appendChar( buffer[count] );
+if( result > SocketReceiveBufSize )
+  throw "SocketApiWin.receiveBuf it can't happen.";
 
-delete[] buffer;
+for( Int32 count = 0; count < result; count++ )
+  recvBuf.appendChar( SocketReceiveBuf[count] );
+
 return true;
 }
 
