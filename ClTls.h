@@ -24,10 +24,11 @@
 
 
 #include "../CppBase/BasicTypes.h"
-// #include "../CppBase/FileIO.h"
 
 
 /*
+Is this a subclass of NetClient?
+No it just uses one.
 class ClTls
   {
   private:

@@ -8,12 +8,21 @@
 // https://www.gnu.org/licenses/gpl-3.0.html
 
 
+// This can be used as a base class for
+// other clients, or in the server with
+// something like SrvClPass.  So it should
+// be just a light, basic client.
+
+
 
 #pragma once
 
 
 #include "../CppBase/BasicTypes.h"
 // #include "../CppBase/FileIO.h"
+
+// Keep SocketsApi.h only in the .cpp file.
+
 
 
 class NetClient
@@ -23,6 +32,8 @@ class NetClient
   // FileIO mainIO;
   // Int32 arraySize = 0;
   // char* cArray;  // Uint8?
+  Int64 activeSec = 0; // When it was active.
+
 
 
 

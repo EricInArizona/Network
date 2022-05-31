@@ -115,7 +115,8 @@ static char SocketReceiveBuf[
 // else sees it.  It's not an inner class,
 // a nested class, but a privately used class.
 
-
+// I could #include this here at this spot,
+// but not yet. 
 class GetAddress
   {
   private:

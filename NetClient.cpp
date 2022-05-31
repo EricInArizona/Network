@@ -10,6 +10,7 @@
 
 #include "NetClient.h"
 #include "../CppBase/Casting.h"
+#include "../CppBase/TimeApi.h"
 #include "../Network/SocketsApi.h"
 
 
@@ -47,7 +48,21 @@ NetClient::~NetClient( void )
 SocketCpp NetClient::connect( const char* domain,
                               const char* port )
 {
-return SocketsApi::connectClient(
+SocketCpp sock = SocketsApi::connectClient(
                     domain, // "www.example.com",
                     port ); // "443"
+
+if( sock == SocketsApi::InvalSock )
+  {
+  activeSec = 0;
+  return sock;
+  }
+
+// The oonstructor sets it to now.
+TimeApi tm;
+
+// Str showS = tm.timeStr();
+
+activeSec = tm.getSeconds();
+return sock;
 }
