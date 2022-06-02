@@ -47,7 +47,8 @@ if( mainSocket == SocketsApi::InvalSock )
 //  inline void setTimeActive( Int64 setTo )
 
 CharBuf recBuf;
-if( !SocketsApi::receiveBuf( mainSocket, recBuf ))
+if( !SocketsApi::receiveCharBuf(
+                             mainSocket, recBuf ))
   {
   // StIO::putS( "receiveBuf returned false." );
   return true; // Not an error.

@@ -23,7 +23,7 @@
 #include "../CppBase/BasicTypes.h"
 #include "../CppBase/CharBuf.h"
 #include "../CppBase/CircleBuf.h"
-// #include "../CppBase/Str.h"
+#include "../CppBase/Str.h"
 // #include "../CppBase/RangeC.h"
 
 // This can't include things like SrvClient.h
@@ -64,12 +64,13 @@ class SocketsApi
 
   static SocketCpp acceptConnect(
                          SocketCpp servSock,
-                         CharBuf& fromCBuf );
+                         Str& fromAddress );
 
-  static Int32 sendBuf( const SocketCpp sendToSock,
-                        const CharBuf& sendBuf );
+  static Int32 sendCharBuf(
+                     const SocketCpp sendToSock,
+                     const CharBuf& sendBuf );
 
-  static bool receiveBuf(
+  static bool receiveCharBuf(
                      const SocketCpp recSock,
                      CharBuf& recvBuf );
 

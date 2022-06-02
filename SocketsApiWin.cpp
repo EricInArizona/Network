@@ -116,7 +116,7 @@ static char SocketReceiveBuf[
 // a nested class, but a privately used class.
 
 // I could #include this here at this spot,
-// but not yet. 
+// but not yet.
 class GetAddress
   {
   private:
@@ -381,7 +381,11 @@ for( Int32 count = 0; count < bufLast; count++ )
 StIO::putCharBuf( fromCBuf );
 StIO::putS( " " );
 
-return fromCBuf.getStr();
+CharArray copyTo;
+fromCBuf.copyToCharArray( copyTo );
+Str result( copyTo );
+
+return result;
 }
 
 
@@ -499,17 +503,14 @@ SocketCpp clientSocket = InvalSock;
 // data, so it will try up to five of them.
 // But it should usually be the first one anyway.
 
-CharBuf fromCBuf;
-
 for( Int32 count = 0; count < 5; count++ )
   {
   StIO::putS( "Client connect address:" );
-  fromCBuf.clear();
 
   sockaddr* addr = getAddress.getSockAddrPt();
 
   Str showAddr = GetAddress::getAddressStr( addr );
-  if( showAddr.getSize() == 0 )
+  if( showAddr.getLast() == 0 )
     {
     StIO::putS( "showAddr size is zero." );
     if( !getAddress.moveToNextAddr())
@@ -518,9 +519,9 @@ for( Int32 count = 0; count < 5; count++ )
     continue;
     }
 
+
   StIO::putS( "Got showAddr." );
-  fromCBuf.appendStr( showAddr );
-  StIO::putCharBuf( fromCBuf );
+  StIO::putStr( showAddr );
   StIO::putS( " " );
 
   clientSocket = socket( getAddress.getFamily(),
@@ -677,10 +678,10 @@ if( !getAddress.getAddressInfo( ipAddress,
   return InvalSock;
   }
 
-CharBuf fromCBuf;
+// CharBuf fromCBuf;
 Str showAddr = GetAddress::getAddressStr(
                        getAddress.getSockAddrPt() );
-if( showAddr.getSize() == 0 )
+if( showAddr.getLast() == 0 )
   {
   StIO::putS( "No IP address for the server." );
   // if( !getAddress.moveToNextAddr())
@@ -690,8 +691,7 @@ if( showAddr.getSize() == 0 )
   }
 
 StIO::putS( "Server IP address:" );
-fromCBuf.appendStr( showAddr );
-StIO::putCharBuf( fromCBuf );
+StIO::putStr( showAddr );
 StIO::putS( " " );
 
 // The stats and hacking info for disallowed
@@ -784,9 +784,9 @@ return false;
 
 SocketCpp SocketsApi::acceptConnect(
                          SocketCpp servSock,
-                         CharBuf& fromCBuf )
+                         Str& fromAddress )
 {
-fromCBuf.clear();
+fromAddress.clear();
 
 // sockaddr_storage is big enough to hold IPv6
 // or IPv4.
@@ -827,23 +827,24 @@ struct sockaddr* sa =
 // Make a fast index of addresses.
 
 Str showAddr = GetAddress::getAddressStr( sa );
-if( showAddr.getSize() == 0 )
+if( showAddr.getLast() == 0 )
   {
   StIO::putS( "No IP address for the server." );
   return InvalSock;
   }
 
 StIO::putS( "Accepted IP address:" );
-fromCBuf.appendStr( showAddr );
-StIO::putCharBuf( fromCBuf );
+StIO::putStr( showAddr );
 StIO::putS( " " );
+
+fromAddress.copy( showAddr );
 
 return acceptSock;
 }
 
 
 
-Int32 SocketsApi::sendBuf(
+Int32 SocketsApi::sendCharBuf(
                    const SocketCpp sendToSock,
                    const CharBuf& sendBuf )
 {
@@ -855,13 +856,12 @@ if( sendToSock == INVALID_SOCKET )
 
 const Int32 howMany = sendBuf.getLast();
 
-CharArray cArray;
-sendBuf.copyToCharArray( cArray );
-
 char* buffer = new char[Casting::i64ToU64(
                                   howMany)];
 
-cArray.copyToCharPt( buffer, howMany );
+// Memory::copy()
+for( Int32 count = 0; count < howMany; count++ )
+  buffer[count] = sendBuf.getC( count );
 
 Int32 result = send( sendToSock,
                      buffer,
@@ -889,7 +889,7 @@ return result;
 
 
 
-bool SocketsApi::receiveBuf(
+bool SocketsApi::receiveCharBuf(
                    const Uint64 recSock,
                    CharBuf& recvBuf )
 {
@@ -952,6 +952,7 @@ if( result < 0 )
 if( result > SocketReceiveBufSize )
   throw "SocketApiWin.receiveBuf it can't happen.";
 
+// Memory::copy()
 for( Int32 count = 0; count < result; count++ )
   recvBuf.appendChar( SocketReceiveBuf[count] );
 

@@ -48,7 +48,7 @@ return server.startServer( port );
 
 void ServerPass::mainLoop( void )
 {
-CharBuf fromCBuf;
+Str fromStr( " " );
 
 while( true )
   {
@@ -63,11 +63,11 @@ while( true )
   // to accept.
   for( Int32 count = 0; count < 100; count++ )
     {
-    fromCBuf.clear();
+    fromStr.clear();
     SocketCpp acceptedSock =
                  SocketsApi::acceptConnect(
                           server.getMainSocket(),
-                          fromCBuf );
+                          fromStr );
 
     // No more sockets to accept.
     if( acceptedSock == SocketsApi::InvalSock )
@@ -79,7 +79,7 @@ while( true )
                                  acceptedSock ));
 
     StIO::putS( "Added new SrvClPass:" );
-    StIO::putCharBuf( fromCBuf );
+    StIO::putStr( fromStr );
     StIO::putS( "\n" );
     }
 
