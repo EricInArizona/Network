@@ -27,7 +27,7 @@ NetClient::NetClient( const NetClient &in )
 {
 // Make the compiler think the in value is
 // being used.
-if( in.testForCopy == 123 )
+if( in.testForCopy == 789 )
   return;
 
 const char* showS = "The NetClient copy constructor"
@@ -40,13 +40,13 @@ throw showS;
 
 NetClient::~NetClient( void )
 {
-// delete[] cArray;
 }
 
 
 
-SocketCpp NetClient::connect( const char* domain,
-                              const char* port )
+SocketCpp NetClient::connect(
+                     Str& domain,
+                     Str& port )
 {
 SocketCpp sock = SocketsApi::connectClient(
                     domain, // "www.example.com",

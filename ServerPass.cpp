@@ -23,7 +23,7 @@ ServerPass::ServerPass( const ServerPass& in )
 {
 // Make the compiler think the in value is
 // being used.
-if( in.testForCopy == 123 )
+if( in.testForCopy == 789 )
   return;
 
 const char* showS = "The ServerPass copy"

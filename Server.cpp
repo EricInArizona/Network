@@ -56,9 +56,12 @@ bool Server::startServer( const char* port )
 {
 StIO::putS( "Starting server." );
 
+// OpenCharArray portAr;
+// port.copyToOpenArray( portAr );
+
 // "localhost"
 mainSocket = SocketsApi::openServer(
-                        "127.0.0.1",  port, true );
+                    "127.0.0.1",  port, true );
 
 if( mainSocket == SocketsApi::InvalSock )
   {

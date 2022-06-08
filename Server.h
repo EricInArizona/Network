@@ -13,9 +13,10 @@
 
 #include "../CppBase/BasicTypes.h"
 // #include "../CppBase/CharBuf.h"
+#include "SocketsApi.h"
 #include "SrvClient.h"
 #include "SClientArray.h"
-#include "SocketsApi.h"
+#include "../CppBase/Str.h"
 
 
 class Server

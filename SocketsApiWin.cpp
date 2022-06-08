@@ -8,10 +8,6 @@
 
 
 
-// A good tutorial:
-// https://beej.us/guide/bgnet/html/
-
-
 
 ////////////////////
 // Some notes:
@@ -53,16 +49,16 @@
 #include "../CppBase/StIO.h"
 
 
-
 extern "C" {
 
-static const Int32 SocketReceiveBufSize =
-                                 1024 * 1024;
-static char SocketReceiveBuf[
-                        SocketReceiveBufSize];
 
+static const Int32 BigReceiveBufSize =
+                            1024 * 1024 * 1;
 
-  } // extern "C"
+static char BigReceiveBuf[BigReceiveBufSize] =
+              { '1', '2', '3' };
+
+} // extern "C"
 
 
 
@@ -375,7 +371,8 @@ for( Int32 count = 0; count < bufLast; count++ )
   if( returnS[count] == 0 )
     break;
 
-  fromCBuf.appendChar( returnS[count] );
+  fromCBuf.appendChar( returnS[count],
+                                  1024 * 32 );
   }
 
 StIO::putCharBuf( fromCBuf );
@@ -387,6 +384,11 @@ Str result( copyTo );
 
 return result;
 }
+/////////////////////////
+
+
+
+
 
 
 
@@ -414,7 +416,7 @@ SocketsApi::SocketsApi( const SocketsApi& in )
 {
 // Make the compiler think the in value is
 // being used.
-if( in.testForCopy == 123 )
+if( in.testForCopy == 789 )
   return;
 
 const char* showS = "The SocketsApi copy"
@@ -479,21 +481,28 @@ shutdown( toClose, SD_RECEIVE );
 
 
 SocketCpp SocketsApi::connectClient(
-                        const char* domain,
-                        const char* port )
+                        const Str& domain,
+                        const Str& port )
 {
 GetAddress getAddress;
 
 // Port 443 for https.
 
-if( !getAddress.getAddressInfo( domain, port,
+OpenCharArray domainNameAr;
+domain.copyToOpenArray( domainNameAr );
+
+OpenCharArray portNameAr;
+port.copyToOpenArray( portNameAr );
+
+if( !getAddress.getAddressInfo( domainNameAr.cArray,
+                                portNameAr.cArray,
                                 false, false ))
   {
   StIO::putS( "connect() could not get address." );
   return InvalSock;
   }
 
-StIO::putS( "Got addresses." );
+StIO::putS( "Client got addresses." );
 
 // SOCKET clientSocket = INVALID_SOCKET;
 SocketCpp clientSocket = InvalSock;
@@ -589,7 +598,7 @@ if( !setNonBlocking( clientSocket ))
   }
 
 StIO::putS( "Connected to:" );
-StIO::putS( domain );
+StIO::putStr( domain );
 
 return clientSocket;
 }
@@ -844,6 +853,7 @@ return acceptSock;
 
 
 
+
 Int32 SocketsApi::sendCharBuf(
                    const SocketCpp sendToSock,
                    const CharBuf& sendBuf )
@@ -856,20 +866,20 @@ if( sendToSock == INVALID_SOCKET )
 
 const Int32 howMany = sendBuf.getLast();
 
-char* buffer = new char[Casting::i64ToU64(
-                                  howMany)];
+OpenCharArray bufferAr;
+sendBuf.copyToOpenCharArray( bufferAr );
 
 // Memory::copy()
 for( Int32 count = 0; count < howMany; count++ )
-  buffer[count] = sendBuf.getC( count );
+  bufferAr.setC( count, sendBuf.getC( count ));
 
 Int32 result = send( sendToSock,
-                     buffer,
+                     bufferAr.cArray,
                      howMany,
                      0 );
 
 // I presume send() is done with the buffer.
-delete[] buffer;
+// It's about to go out of scope.
 
 if( result == SOCKET_ERROR )
   {
@@ -887,11 +897,67 @@ return result;
 }
 
 
+bool SocketsApi::sendStr(
+                   const SocketCpp sendToSock,
+                   const Str& sendStr )
+{
+if( sendToSock == INVALID_SOCKET )
+  {
+  StIO::putS( "sendStr() sendToSock is invalid." );
+  return false;
+  }
+
+// This does not include that final zero
+// character.
+const Int32 howMany = sendStr.getLast();
+
+OpenCharArray bufferAr;
+sendStr.copyToOpenArray( bufferAr );
+
+// Memory::copy()
+for( Int32 count = 0; count < howMany; count++ )
+  bufferAr.setC( count, sendStr.getC( count ));
+
+// Telling it to send the characters of
+// the string without the final zero character.
+
+Int32 result = send( sendToSock,
+                     bufferAr.cArray,
+                     howMany, // Not the zero.
+                     0 );
+
+// I presume send() is done with the buffer.
+// It's about to go out of scope.
+
+if( result == SOCKET_ERROR )
+  {
+  StIO::putS( "SocketsApi sendBuf() error." );
+  Int32 error = WSAGetLastError();
+  StIO::printF( "Error is: " );
+  StIO::printFD( error );
+  StIO::printF( "\n" );
+  closesocket( sendToSock );
+  return false;
+  }
+
+if( howMany != result )
+  {
+  // It couldn't send the whole string.
+  StIO::putS( "SocketsApi sendStr not complete." );
+  return false;
+  }
+
+return true;
+}
+
+
 
 
 bool SocketsApi::receiveCharBuf(
                    const Uint64 recSock,
                    CharBuf& recvBuf )
+{
+try
 {
 // Make sure it is cleared because this tells
 // me how much data was received.  If any.
@@ -906,17 +972,17 @@ if( recSock == InvalSock )
 
 // This gets called very often just to see if
 // data has come in, and it often returns
-// Would Block.  So the buffer
-// SocketReceiveBuf is allocated for the life
-// of the program.  SocketReceiveBuf is only
-// seen within this compilation unit.  I don't
-// want to allocate a large buffer many times
-// per second.  Also, it's a large buffer so
-// that it will read as much as possible each
-// time it reads with recv().
+// Would Block.  So the buffer BigReceiveBuf
+// is allocated for the life of the program.
+// I don't want to allocate a large
+// buffer many times per second.  Also, it's
+// a large buffer so that it will read as
+// much as possible each time it reads with recv().
 
-Int32 result = recv( recSock, SocketReceiveBuf,
-                     SocketReceiveBufSize, 0 );
+Int32 result = recv( recSock,
+                     BigReceiveBuf,
+                     BigReceiveBufSize,
+                     0 );
 
 if( result == 0 )
   {
@@ -949,14 +1015,28 @@ if( result < 0 )
   return false; // Close this socket.
   }
 
-if( result > SocketReceiveBufSize )
-  throw "SocketApiWin.receiveBuf it can't happen.";
-
 // Memory::copy()
 for( Int32 count = 0; count < result; count++ )
-  recvBuf.appendChar( SocketReceiveBuf[count] );
+  {
+  // This is not supposed to happen.
+  if( count >= BigReceiveBufSize )
+    throw "SocketsApi receiveCharBuf too big.";
+
+  recvBuf.appendChar( BigReceiveBuf[count],
+                                      1024 * 64 );
+  }
 
 return true;
+
+}
+catch( ... )
+  {
+  const char* errorS = "FileIO writeCharBuf"
+                " exception.";
+
+  StIO::putS( errorS );
+  return false;
+  }
 }
 
 

@@ -19,9 +19,8 @@
 
 
 #include "../CppBase/BasicTypes.h"
+#include "../CppBase/Str.h"
 // #include "../CppBase/FileIO.h"
-
-// Keep SocketsApi.h only in the .cpp file.
 
 
 
@@ -41,7 +40,7 @@ class NetClient
   NetClient( void );
   NetClient( const NetClient &in );
   ~NetClient( void );
-  SocketCpp connect( const char* domain,
-                     const char* port );
+  SocketCpp connect( Str& domain,
+                     Str& port );
 
   };
