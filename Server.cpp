@@ -10,7 +10,6 @@
 
 #include "Server.h"
 #include "../CppBase/StIO.h"
-// #include "../CppBase/Threads.h"
 #include "../WinApi/Signals.h"
 // #include "../LinuxApi/Signals.h"
 
@@ -27,9 +26,7 @@ Server::Server( const Server& in )
 {
 mainSocket = SocketsApi::InvalSock;
 
-// Make the compiler think the in value is
-// being used.
-if( in.testForCopy == 123 )
+if( in.testForCopy )
   return;
 
 const char* showS = "The Server copy"

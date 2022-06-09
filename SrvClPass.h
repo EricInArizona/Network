@@ -21,6 +21,8 @@
 class SrvClPass: public SrvClient
   {
   private:
+  // ==== Need a NetClient for this.
+  // Or a sub class of it?
   // SocketCpp clientSocket = 0;
 
   protected:

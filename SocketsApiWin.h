@@ -36,7 +36,7 @@
 class SocketsApi
   {
   private:
-  Int32 testForCopy = 123;
+  bool testForCopy = false;
 
   public:
   static const SocketCpp InvalSock =

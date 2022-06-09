@@ -11,7 +11,6 @@
 #include "SrvClient.h"
 #include "../CppBase/StIO.h"
 #include "SocketsApi.h"
-#include "../WinApi/TimeApiWin.h"
 
 
 
@@ -19,8 +18,7 @@ SrvClient::SrvClient( void )
 {
 // All base class constructors are always called.
 
-TimeApi now;
-timeActive = now.getSeconds();
+setTimeActiveNow();
 
 StIO::putS( "SrvClient constructor called." );
 }
@@ -36,10 +34,7 @@ StIO::putS( "SrvClient useSocket constructor." );
 
 SrvClient::SrvClient( const SrvClient& in )
 {
-
-// Make the compiler think the in value is
-// being used.
-if( in.testForCopy == 123 )
+if( in.testForCopy )
   return;
 
 // You don't want to slice an object to a

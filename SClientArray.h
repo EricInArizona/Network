@@ -19,8 +19,7 @@
 class SClientArray
   {
   private:
-  Int32 testForCopy = 123;
-  // A pointer to the starting point of the array.
+  bool testForCopy = false;
   SrvClPoint* sClPointAr;
 
   // This will not grow.  On purpose.

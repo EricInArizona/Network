@@ -21,10 +21,25 @@
 class SrvClPoint
   {
   private:
+  bool testForCopy = false;
 
   protected:
 
   public:
   SrvClient* srvClientP = nullptr;
+
+  inline SrvClPoint( void )
+    {
+    }
+
+  inline SrvClPoint( const SrvClPoint &in )
+    {
+    if( in.testForCopy )
+      return;
+
+    throw "SrvClPoint copy constructor.";
+    }
+
+  // ~SrvClPoint( void );
 
   };

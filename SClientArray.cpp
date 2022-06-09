@@ -28,8 +28,7 @@ SClientArray::SClientArray(
 sClPointAr = new SrvClPoint[Casting::i32ToU64(
                                   arraySize )];
 
-// Make the compiler think in is being used.
-if( in.testForCopy == 7 )
+if( in.testForCopy )
   return;
 
 throw "Copy constructor for SClientArray.";

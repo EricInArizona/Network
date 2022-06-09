@@ -22,7 +22,7 @@
 class Server
   {
   private:
-  Int32 testForCopy = 123;
+  bool testForCopy = false;
   // There is one main server socket.
   SocketCpp mainSocket = SocketsApi::InvalSock;
   SClientArray sClientAr;

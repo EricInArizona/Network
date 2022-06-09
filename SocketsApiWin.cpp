@@ -414,9 +414,7 @@ if( WSAStartup( MAKEWORD(2,2), &wsaData ) != 0 )
 
 SocketsApi::SocketsApi( const SocketsApi& in )
 {
-// Make the compiler think the in value is
-// being used.
-if( in.testForCopy == 789 )
+if( in.testForCopy )
   return;
 
 const char* showS = "The SocketsApi copy"

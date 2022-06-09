@@ -12,6 +12,7 @@
 
 #include "../CppBase/BasicTypes.h"
 #include "SocketsApi.h"
+#include "../CppBase/TimeApi.h"
 
 
 // This is the server's view of one client
@@ -22,7 +23,7 @@
 class SrvClient
   {
   private:
-  Int32 testForCopy = 123;
+  bool testForCopy = false;
 
   protected:
   SrvClient( void );
@@ -38,9 +39,14 @@ class SrvClient
 
   virtual bool processData( void );
 
-  inline void setTimeActive( Int64 setTo )
+  inline void setTimeActiveNow( void )
     {
-    timeActive = setTo;
+    // The oonstructor sets it to now.
+    TimeApi tm;
+
+    // Str showS = tm.timeStr();
+
+    timeActive = tm.getSeconds();
     }
 
   };

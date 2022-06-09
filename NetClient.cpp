@@ -17,17 +17,13 @@
 
 NetClient::NetClient( void )
 {
-// arraySize = 1024 * 2;
-// cArray = new char[Casting::i32ToU64( arraySize )];
 }
 
 
 
 NetClient::NetClient( const NetClient &in )
 {
-// Make the compiler think the in value is
-// being used.
-if( in.testForCopy == 789 )
+if( in.testForCopy )
   return;
 
 const char* showS = "The NetClient copy constructor"
@@ -54,15 +50,11 @@ SocketCpp sock = SocketsApi::connectClient(
 
 if( sock == SocketsApi::InvalSock )
   {
-  activeSec = 0;
+  timeActive = 0;
   return sock;
   }
 
-// The oonstructor sets it to now.
-TimeApi tm;
-
-// Str showS = tm.timeStr();
-
-activeSec = tm.getSeconds();
+setTimeActiveNow();
 return sock;
 }
+

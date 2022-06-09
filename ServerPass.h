@@ -21,7 +21,7 @@
 class ServerPass
   {
   private:
-  Int32 testForCopy = 123;
+  bool testForCopy = false;
   Server server;
 
   public:

@@ -20,21 +20,15 @@
 
 #include "../CppBase/BasicTypes.h"
 #include "../CppBase/Str.h"
-// #include "../CppBase/FileIO.h"
+#include "../CppBase/TimeApi.h"
 
 
 
 class NetClient
   {
   private:
-  Int32 testForCopy = 123;
-  // FileIO mainIO;
-  // Int32 arraySize = 0;
-  // char* cArray;  // Uint8?
-  Int64 activeSec = 0; // When it was active.
-
-
-
+  bool testForCopy = false;
+  Int64 timeActive = 0;
 
   public:
   NetClient( void );
@@ -43,4 +37,15 @@ class NetClient
   SocketCpp connect( Str& domain,
                      Str& port );
 
+  inline void setTimeActiveNow( void )
+    {
+    // The oonstructor sets it to now.
+    TimeApi tm;
+
+    // Str showS = tm.timeStr();
+
+    timeActive = tm.getSeconds();
+    }
+
   };
+

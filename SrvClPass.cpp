@@ -15,6 +15,7 @@
 
 SrvClPass::SrvClPass( void )
 {
+setTimeActiveNow();
 StIO::putS( "SrvClPass constructor called." );
 
 }
@@ -23,8 +24,10 @@ StIO::putS( "SrvClPass constructor called." );
 
 SrvClPass::SrvClPass( SocketCpp useSocket )
 {
+setTimeActiveNow();
 mainSocket = useSocket;
 StIO::putS( "SrvClPass useSocket constructor." );
+
 }
 
 
@@ -61,6 +64,8 @@ if( recBuf.getLast() == 0 )
   }
 
 // ==== So send the data on to the client socket.
+setTimeActiveNow();
+
 StIO::putS( "Received data:" );
 StIO::putCharBuf( recBuf );
 
