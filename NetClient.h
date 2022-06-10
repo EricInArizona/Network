@@ -21,6 +21,7 @@
 #include "../CppBase/BasicTypes.h"
 #include "../CppBase/Str.h"
 #include "../CppBase/TimeApi.h"
+#include "../Network/SocketsApi.h"
 
 
 
@@ -29,23 +30,23 @@ class NetClient
   private:
   bool testForCopy = false;
   Int64 timeActive = 0;
+  SocketCpp mainSocket = SocketsApi::InvalSock;
 
   public:
   NetClient( void );
   NetClient( const NetClient &in );
   ~NetClient( void );
-  SocketCpp connect( Str& domain,
-                     Str& port );
-
-  inline void setTimeActiveNow( void )
+  bool connect( Str& domain,
+                Str& port );
+  bool sendStr( Str toSend );
+  void closeSocket( void );
+  inline bool isConnected( void )
     {
-    // The oonstructor sets it to now.
-    TimeApi tm;
+    if( mainSocket == SocketsApi::InvalSock )
+      return false;
 
-    // Str showS = tm.timeStr();
-
-    timeActive = tm.getSeconds();
+    return true;
     }
 
-  };
 
+  };

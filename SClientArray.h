@@ -23,7 +23,7 @@ class SClientArray
   SrvClPoint* sClPointAr;
 
   // This will not grow.  On purpose.
-  const Int32 arraySize = 5;
+  const Int32 arraySize = 5; // 50000
 
   // Make a stats object.
   Int64 tooManyConnections = 0;

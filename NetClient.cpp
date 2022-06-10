@@ -11,7 +11,6 @@
 #include "NetClient.h"
 #include "../CppBase/Casting.h"
 #include "../CppBase/TimeApi.h"
-#include "../Network/SocketsApi.h"
 
 
 
@@ -36,25 +35,40 @@ throw showS;
 
 NetClient::~NetClient( void )
 {
+closeSocket();
 }
 
 
 
-SocketCpp NetClient::connect(
-                     Str& domain,
-                     Str& port )
+bool NetClient::connect( Str& domain,
+                         Str& port )
 {
-SocketCpp sock = SocketsApi::connectClient(
+mainSocket = SocketsApi::connectClient(
                     domain, // "www.example.com",
                     port ); // "443"
 
-if( sock == SocketsApi::InvalSock )
-  {
-  timeActive = 0;
-  return sock;
-  }
+if( mainSocket == SocketsApi::InvalSock )
+  return false;
 
-setTimeActiveNow();
-return sock;
+timeActive = TimeApi::getSecondsNow();
+return true;
 }
 
+
+
+bool NetClient::sendStr( Str toSend )
+{
+if( mainSocket == SocketsApi::InvalSock )
+  return false;
+
+return SocketsApi::sendStr( mainSocket, toSend );
+}
+
+
+void NetClient::closeSocket( void )
+{
+if( mainSocket == SocketsApi::InvalSock )
+  return;
+
+SocketsApi::closeSocket( mainSocket );
+}

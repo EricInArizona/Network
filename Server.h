@@ -38,7 +38,9 @@ class Server
     }
 
   bool addNewClient( SrvClient* toAdd );
-  bool startServer( const char* port );
+  bool startServer( const char* address,
+                    const char* port );
+
   bool oneLoop( void );
 
   };

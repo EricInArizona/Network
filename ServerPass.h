@@ -28,7 +28,8 @@ class ServerPass
   ServerPass( void );
   ServerPass( const ServerPass &in );
   ~ServerPass( void );
-  bool startServer( const char* port );
+  bool startServer( const char* address,
+                    const char* port );
   void mainLoop( void );
 
   };

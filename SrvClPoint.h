@@ -21,6 +21,7 @@
 class SrvClPoint
   {
   private:
+  // This doesn't need to stay here.
   bool testForCopy = false;
 
   protected:

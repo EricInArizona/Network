@@ -24,11 +24,11 @@ class SrvClient
   {
   private:
   bool testForCopy = false;
+  Int64 timeActive = 0;
 
   protected:
   SrvClient( void );
   SocketCpp mainSocket = SocketsApi::InvalSock;
-  Int64 timeActive = 0;
 
   public:
   SrvClient( SocketCpp useSocket );
@@ -39,14 +39,28 @@ class SrvClient
 
   virtual bool processData( void );
 
+  inline Int64 getTimeActive( void ) const
+    {
+    return timeActive;
+    }
+
   inline void setTimeActiveNow( void )
     {
-    // The oonstructor sets it to now.
-    TimeApi tm;
+    timeActive = TimeApi::getSecondsNow();
+    }
 
-    // Str showS = tm.timeStr();
+  inline bool isActive( void )
+    {
+    if( mainSocket == SocketsApi::InvalSock )
+      return false;
 
-    timeActive = tm.getSeconds();
+    Int64 diff = TimeApi::getSecondsNow() -
+                 timeActive;
+
+    if( diff < 30 )
+      return true;
+
+    return false;
     }
 
   };

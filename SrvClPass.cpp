@@ -17,7 +17,6 @@ SrvClPass::SrvClPass( void )
 {
 setTimeActiveNow();
 StIO::putS( "SrvClPass constructor called." );
-
 }
 
 
@@ -27,7 +26,6 @@ SrvClPass::SrvClPass( SocketCpp useSocket )
 setTimeActiveNow();
 mainSocket = useSocket;
 StIO::putS( "SrvClPass useSocket constructor." );
-
 }
 
 
@@ -45,29 +43,46 @@ bool SrvClPass::processData( void )
 if( mainSocket == SocketsApi::InvalSock )
   return false;
 
-// Is it active or not?
-// Close down inactive clients.
-//  inline void setTimeActive( Int64 setTo )
+/*
+if( !netClient.isConnected())
+  {
+  // Test it with a news web site.
+  Str domain( "www.durangoherald.com" );
+  Str port( "443" );
+  netClient.connect( domain, port );
+  }
+*/
 
 CharBuf recBuf;
 if( !SocketsApi::receiveCharBuf(
                              mainSocket, recBuf ))
   {
-  // StIO::putS( "receiveBuf returned false." );
-  return true; // Not an error.
+  // Some error.  This socket will get closed.
+  return false;
   }
 
+// If it received nothing.
 if( recBuf.getLast() == 0 )
   {
+  if( !isActive())
+    {
+    StIO::putS( "Closing inactive socket." );
+    SocketsApi::closeSocket( mainSocket );
+    mainSocket = SocketsApi::InvalSock;
+    return false;
+    }
+
   // StIO::putS( "receiveBuf has nothing in it." );
   return true; // Not an error.
   }
 
-// ==== So send the data on to the client socket.
+// It received some data.
 setTimeActiveNow();
 
 StIO::putS( "Received data:" );
 StIO::putCharBuf( recBuf );
+
+// Send any data that needs to be sent.
 
 // false will close down this socket.
 return true;

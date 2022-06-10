@@ -12,6 +12,16 @@
 ////////////////////
 // Some notes:
 
+
+// Unix sockets for interprocess communication.
+// sockaddr_un
+// AF_UNIX
+// https://devblogs.microsoft.com/
+//        commandline/af_unix-comes-to-windows/
+
+// https://beej.us/guide/bgipc/html/single/bgipc.html
+
+
 // IPv4 addresses are 4 bytes.  They are shown
 // as a string delimited with dots like:
 // 123.45.67.89
@@ -955,6 +965,9 @@ bool SocketsApi::receiveCharBuf(
                    const Uint64 recSock,
                    CharBuf& recvBuf )
 {
+// Only return false here if the socket should
+// be closed.
+
 try
 {
 // Make sure it is cleared because this tells
@@ -988,7 +1001,8 @@ if( result == 0 )
   // The connection was _gracefully_ closed.
   // Define graceful.  Am I still receiving
   // data from a system buffer?
-  StIO::putS( "receiveBuf() connection closed." );
+  // StIO::putS(
+      //    "receiveBuf() connection graceful." );
   return true; // Not an error.
   }
 

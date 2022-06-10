@@ -100,6 +100,8 @@ for( Int32 count = 0; count < arraySize;
   {
   if( sClPointAr[count].srvClientP != nullptr )
     {
+    // Let sub classes process data in the way
+    // that a sub class does.
     if( !sClPointAr[count].
            srvClientP->processData())
       {

@@ -38,9 +38,10 @@ ServerPass::~ServerPass( void )
 
 
 
-bool ServerPass::startServer( const char* port )
+bool ServerPass::startServer( const char* address,
+                              const char* port )
 {
-return server.startServer( port );
+return server.startServer( address, port );
 }
 
 
@@ -78,7 +79,7 @@ while( true )
 
     StIO::putS( "Added new SrvClPass:" );
     StIO::putStr( fromStr );
-    StIO::putS( "\n" );
+    StIO::putS( " " );
     }
 
   // FinishLoopTime = something

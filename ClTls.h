@@ -19,36 +19,29 @@
 // RFC 5246:
 // The Transport Layer Security (TLS) Protocol
 // Version 1.2
+// ==== Need version 1.3
 // https://tools.ietf.org/html/rfc5246
 
 
 
 #include "../CppBase/BasicTypes.h"
+#include "NetClient.h"
 
 
-/*
-Is this a subclass of NetClient?
-No it just uses one.
-class ClTls
+class ClTls: public NetClient
   {
   private:
-  Int32 testForCopy = 123;
-  // FileIO mainIO;
-  Int32 arraySize = 0;
-  char* cArray;  // Uint8?
-
-
+  bool testForCopy = false;
 
   public:
-  SocketClient( void );
-  SocketClient( const SocketClient &in );
-  ~SocketClient( void );
+  ClTls( void );
+  ClTls( const ClTls &in );
+  ~ClTls( void );
   // void doSomething( void );
 
 
 
   };
-*/
 
 
 

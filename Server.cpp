@@ -49,20 +49,23 @@ return sClientAr.addNewClient( toAdd );
 }
 
 
-bool Server::startServer( const char* port )
+bool Server::startServer( const char* address,
+                          const char* port )
 {
 StIO::putS( "Starting server." );
 
 // OpenCharArray portAr;
 // port.copyToOpenArray( portAr );
 
-// "localhost"
+// It can be "localhost".
+// localhost might use an IPv6 address.
+// Use "127.0.0.1" for IPv4 localhost.
 mainSocket = SocketsApi::openServer(
-                    "127.0.0.1",  port, true );
+                    address,  port, true );
 
 if( mainSocket == SocketsApi::InvalSock )
   {
-  StIO::putS( "Coule not start the server." );
+  StIO::putS( "Could not start the server." );
   return false;
   }
 
@@ -79,9 +82,11 @@ bool Server::oneLoop( void )
 if( Signals::getControlCSignal())
   {
   StIO::putS( "Closing server on Ctrl-C." );
-  sClientAr.closeAllSockets();
 
   SocketsApi::closeSocket( mainSocket );
+  mainSocket = SocketsApi::InvalSock;
+  sClientAr.closeAllSockets();
+
   StIO::putS( "Closed server." );
   return false;
   }

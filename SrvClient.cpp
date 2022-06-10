@@ -16,8 +16,6 @@
 
 SrvClient::SrvClient( void )
 {
-// All base class constructors are always called.
-
 setTimeActiveNow();
 
 StIO::putS( "SrvClient constructor called." );
@@ -36,10 +34,6 @@ SrvClient::SrvClient( const SrvClient& in )
 {
 if( in.testForCopy )
   return;
-
-// You don't want to slice an object to a
-// sub class.  Always pass a pointer or a
-// reference.  Not a copy of the object itself.
 
 const char* showS = "The SrvClient copy"
          " constructor should not get called.";
@@ -64,5 +58,6 @@ StIO::putS( "SrvClient destructor called." );
 
 bool SrvClient::processData( void )
 {
-return true;
+// This should not get called.
+return false;
 }

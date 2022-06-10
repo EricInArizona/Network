@@ -13,36 +13,26 @@
 
 
 
-/*
-SocketClient::SocketClient( void )
+ClTls::ClTls( void )
 {
-arraySize = 1024 * 2;
-cArray = new char[Casting::i32ToU64( arraySize )];
 }
 
 
 
-SocketClient::SocketClient( const SocketClient &in )
+ClTls::ClTls( const ClTls &in )
 {
-// Make the compiler think the in value is
-// being used.
-if( in.testForCopy == 123 )
+if( in.testForCopy )
   return;
 
-// Don't copy a giant buffer.
-const char* showS = "The SocketClient copy constructor"
-         " should not be getting called.\n";
-
-throw showS;
+throw "ClTls copy constructor.";
 }
 
 
 
-SocketClient::~SocketClient( void )
+ClTls::~ClTls( void )
 {
-delete[] cArray;
 }
-*/
+
 
 
 

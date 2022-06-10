@@ -13,6 +13,7 @@
 
 #include "../CppBase/BasicTypes.h"
 #include "SrvClient.h"
+#include "NetClient.h"
 
 
 // A pass-through SrvClient.
@@ -21,9 +22,7 @@
 class SrvClPass: public SrvClient
   {
   private:
-  // ==== Need a NetClient for this.
-  // Or a sub class of it?
-  // SocketCpp clientSocket = 0;
+  NetClient netClient;
 
   protected:
   SrvClPass( void );

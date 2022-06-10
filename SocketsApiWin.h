@@ -68,7 +68,7 @@ class SocketsApi
                      const CharBuf& sendBuf );
 
   static bool sendStr( const SocketCpp sendToSock,
-                const Str& sendStr );
+                       const Str& sendStr );
 
   static bool receiveCharBuf(
                        const SocketCpp recSock,
