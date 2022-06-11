@@ -74,8 +74,12 @@ while( true )
 
     // Add the kind of SrvClient socket I
     // want to add.
+
+    // Give it a news web site for testing.
+    Str testAdr( "www.durangoherald.com" );
     server.addNewClient( new SrvClPass(
-                                 acceptedSock ));
+                                 acceptedSock,
+                                 testAdr ));
 
     StIO::putS( "Added new SrvClPass:" );
     StIO::putStr( fromStr );

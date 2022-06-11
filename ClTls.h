@@ -12,15 +12,13 @@
 #pragma once
 
 
+// This is the client for Transport Layer
+// Security.
+// TLS version 1.3.
+// RFC 8446
+
 
 // Port 443 for https.
-
-
-// RFC 5246:
-// The Transport Layer Security (TLS) Protocol
-// Version 1.2
-// ==== Need version 1.3
-// https://tools.ietf.org/html/rfc5246
 
 
 
@@ -37,9 +35,7 @@ class ClTls: public NetClient
   ClTls( void );
   ClTls( const ClTls &in );
   ~ClTls( void );
-  // void doSomething( void );
-
-
+  void sendClientHello( void );
 
   };
 

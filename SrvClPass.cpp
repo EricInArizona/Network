@@ -16,15 +16,18 @@
 SrvClPass::SrvClPass( void )
 {
 setTimeActiveNow();
+
 StIO::putS( "SrvClPass constructor called." );
 }
 
 
 
-SrvClPass::SrvClPass( SocketCpp useSocket )
+SrvClPass::SrvClPass( SocketCpp useSocket,
+                      const Str& address )
 {
 setTimeActiveNow();
 mainSocket = useSocket;
+clientAddress.copy( address );
 StIO::putS( "SrvClPass useSocket constructor." );
 }
 
@@ -46,10 +49,8 @@ if( mainSocket == SocketsApi::InvalSock )
 /*
 if( !netClient.isConnected())
   {
-  // Test it with a news web site.
-  Str domain( "www.durangoherald.com" );
   Str port( "443" );
-  netClient.connect( domain, port );
+  netClient.connect( clientAddress, port );
   }
 */
 
