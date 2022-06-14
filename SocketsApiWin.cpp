@@ -997,13 +997,11 @@ Int32 result = recv( recSock,
 
 if( result == 0 )
   {
-  // Let this time out.
   // The connection was _gracefully_ closed.
-  // Define graceful.  Am I still receiving
-  // data from a system buffer?
+  // Define graceful.
   // StIO::putS(
       //    "receiveBuf() connection graceful." );
-  return true; // Not an error.
+  return false; // Close it.
   }
 
 if( result < 0 )
@@ -1043,7 +1041,7 @@ return true;
 }
 catch( ... )
   {
-  const char* errorS = "FileIO writeCharBuf"
+  const char* errorS = "SocketsApi receiveCharBuf"
                 " exception.";
 
   StIO::putS( errorS );
