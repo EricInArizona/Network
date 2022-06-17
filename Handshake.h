@@ -8,6 +8,7 @@
 // https://www.gnu.org/licenses/gpl-3.0.html
 
 
+#include "../CppBase/BasicTypes.h"
 #include "../CppBase/CharArray.h"
 
 
@@ -83,4 +84,3 @@ DHE denotes ephemeral Diffie-Hellman, where
 
 
 */
-

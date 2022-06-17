@@ -555,7 +555,7 @@ for( Int32 count = 0; count < 5; count++ )
 
   Int32 connectResult = connect( clientSocket,
              getAddress.getSockAddrPt(),
-             Casting::U64ToI32(
+             Casting::u64ToI32(
              getAddress.getAddrLength() ));
 
   if( connectResult == SOCKET_ERROR )
@@ -735,7 +735,7 @@ if( serverSocket == InvalSock )
 
 if( 0 != bind( serverSocket, getAddress.
                getSockAddrPt(),
-               Casting::U64ToI32(
+               Casting::u64ToI32(
                getAddress.getAddrLength() )))
   {
   closeSocket( serverSocket );

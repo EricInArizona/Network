@@ -12,7 +12,7 @@
 
 
 
-void Handshake::makeClientHello( 
+void Handshake::makeClientHello(
                             CharArray& msgAr )
 {
 const Int32 length = 50; // ??
@@ -26,7 +26,7 @@ msgAr.setC( 1, Casting::i32ToByte(
 msgAr.setC( 2, Casting::i32ToByte(
                                  length >> 8 ));
 msgAr.setC( 3, Casting::i32ToByte(
-                                 length6 ));
+                                 length ));
 
 /*
 
@@ -86,5 +86,3 @@ msgAr.setC( 3, Casting::i32ToByte(
     }
   */
 }
-
-

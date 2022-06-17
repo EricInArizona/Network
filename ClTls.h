@@ -33,6 +33,3 @@ class ClTls: public NetClient
   ~ClTls( void );
 
   };
-
-
-
