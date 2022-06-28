@@ -47,7 +47,7 @@ return server.startServer( address, port );
 
 void ServerPass::mainLoop( void )
 {
-Str fromStr( " " );
+CharBuf fromCBuf;
 
 while( true )
   {
@@ -62,11 +62,11 @@ while( true )
   // to accept.
   for( Int32 count = 0; count < 100; count++ )
     {
-    fromStr.clear();
+    fromCBuf.clear();
     SocketCpp acceptedSock =
                  SocketsApi::acceptConnect(
                           server.getMainSocket(),
-                          fromStr );
+                          fromCBuf );
 
     // No more sockets to accept.
     if( acceptedSock == SocketsApi::InvalSock )
@@ -76,13 +76,12 @@ while( true )
     // want to add.
 
     // Give it a news web site for testing.
-    Str testAdr( "www.durangoherald.com" );
     server.addNewClient( new SrvClPass(
-                                 acceptedSock,
-                                 testAdr ));
+                     acceptedSock,
+                     "www.durangoherald.com" ));
 
     StIO::putS( "Added new SrvClPass:" );
-    StIO::putStr( fromStr );
+    StIO::putCharBuf( fromCBuf );
     StIO::putS( " " );
     }
 

@@ -23,7 +23,7 @@ StIO::putS( "SrvClPass constructor called." );
 
 
 SrvClPass::SrvClPass( SocketCpp useSocket,
-                      const Str& address )
+                      const CharBuf& address )
 {
 setTimeActiveNow();
 mainSocket = useSocket;

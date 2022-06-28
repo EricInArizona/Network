@@ -23,14 +23,14 @@ class SrvClPass: public SrvClient
   {
   private:
   NetClient netClient;
-  Str clientAddress;
+  CharBuf clientAddress;
 
   protected:
   SrvClPass( void );
 
   public:
   SrvClPass( SocketCpp useSocket,
-             const Str& address );
+             const CharBuf& address );
   ~SrvClPass( void ) override;
   bool processData( void ) override;
 

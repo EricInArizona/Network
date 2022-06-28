@@ -40,8 +40,8 @@ closeSocket();
 
 
 
-bool NetClient::connect( Str& domain,
-                         Str& port )
+bool NetClient::connect( const char* domain,
+                         const char* port )
 {
 mainSocket = SocketsApi::connectClient(
                     domain, // "www.example.com",
@@ -56,12 +56,12 @@ return true;
 
 
 
-bool NetClient::sendStr( Str toSend )
+bool NetClient::sendCharBuf( CharBuf& toSend )
 {
 if( mainSocket == SocketsApi::InvalSock )
   return false;
 
-return SocketsApi::sendStr( mainSocket, toSend );
+return SocketsApi::sendCharBuf( mainSocket, toSend );
 }
 
 

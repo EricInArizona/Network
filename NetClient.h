@@ -19,7 +19,6 @@
 
 
 #include "../CppBase/BasicTypes.h"
-#include "../CppBase/Str.h"
 #include "../CppBase/TimeApi.h"
 #include "../Network/SocketsApi.h"
 
@@ -36,9 +35,9 @@ class NetClient
   NetClient( void );
   NetClient( const NetClient &in );
   ~NetClient( void );
-  bool connect( Str& domain,
-                Str& port );
-  bool sendStr( Str toSend );
+  bool connect( const char* domain,
+                const char* port );
+  bool sendCharBuf( CharBuf& toSend );
   void closeSocket( void );
   inline bool isConnected( void )
     {

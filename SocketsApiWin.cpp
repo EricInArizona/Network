@@ -164,7 +164,8 @@ class GetAddress
 
   bool moveToNextAddr( void );
 
-  static Str getAddressStr( struct sockaddr* sa );
+  static bool getAddressBuf( CharBuf& charBuf,
+                             struct sockaddr* sa );
 
   inline Int32 getFamily( void )
     {
@@ -297,7 +298,8 @@ return true;
 
 
 
-Str GetAddress::getAddressStr(
+bool GetAddress::getAddressBuf(
+                             CharBuf& charBuf,
                              struct sockaddr* sa )
 {
 CharBuf fromCBuf;
@@ -338,14 +340,14 @@ void* sinAddress = nullptr;
 if( sa == nullptr )
   {
   StIO::putS( "The sa was null in getAddressStr." );
-  return Str( "" );
+  return false;
   }
 
 if( !( (sa->sa_family == AF_INET) ||
        (sa->sa_family == AF_INET6)) )
   {
   StIO::putS( "The sa_family is not right." );
-  return Str( "" );
+  return false;
   }
 
 if( sa->sa_family == AF_INET )
@@ -373,7 +375,7 @@ if( nullptr == inet_ntop( sa->sa_family,
             returnS, sizeof( returnS ) ))
   {
   StIO::putS( "Error getting the address string." );
-  return Str( "" );
+  return false;
   }
 
 for( Int32 count = 0; count < bufLast; count++ )
@@ -388,11 +390,9 @@ for( Int32 count = 0; count < bufLast; count++ )
 StIO::putCharBuf( fromCBuf );
 StIO::putS( " " );
 
-CharArray copyTo;
-fromCBuf.copyToCharArray( copyTo );
-Str result( copyTo );
+charBuf.copy( fromCBuf );
 
-return result;
+return true;
 }
 /////////////////////////
 
@@ -489,21 +489,16 @@ shutdown( toClose, SD_RECEIVE );
 
 
 SocketCpp SocketsApi::connectClient(
-                        const Str& domain,
-                        const Str& port )
+                        const char* domain,
+                        const char* port )
 {
 GetAddress getAddress;
 
 // Port 443 for https.
 
-OpenCharArray domainNameAr;
-domain.copyToOpenArray( domainNameAr );
 
-OpenCharArray portNameAr;
-port.copyToOpenArray( portNameAr );
-
-if( !getAddress.getAddressInfo( domainNameAr.cArray,
-                                portNameAr.cArray,
+if( !getAddress.getAddressInfo( domain,
+                                port,
                                 false, false ))
   {
   StIO::putS( "connect() could not get address." );
@@ -526,7 +521,8 @@ for( Int32 count = 0; count < 5; count++ )
 
   sockaddr* addr = getAddress.getSockAddrPt();
 
-  Str showAddr = GetAddress::getAddressStr( addr );
+  CharBuf showAddr;
+  GetAddress::getAddressBuf( showAddr, addr );
   if( showAddr.getLast() == 0 )
     {
     StIO::putS( "showAddr size is zero." );
@@ -538,7 +534,7 @@ for( Int32 count = 0; count < 5; count++ )
 
 
   StIO::putS( "Got showAddr." );
-  StIO::putStr( showAddr );
+  StIO::putCharBuf( showAddr );
   StIO::putS( " " );
 
   clientSocket = socket( getAddress.getFamily(),
@@ -606,7 +602,7 @@ if( !setNonBlocking( clientSocket ))
   }
 
 StIO::putS( "Connected to:" );
-StIO::putStr( domain );
+StIO::putS( domain );
 
 return clientSocket;
 }
@@ -696,7 +692,8 @@ if( !getAddress.getAddressInfo( ipAddress,
   }
 
 // CharBuf fromCBuf;
-Str showAddr = GetAddress::getAddressStr(
+CharBuf showAddr;
+GetAddress::getAddressBuf( showAddr,
                        getAddress.getSockAddrPt() );
 if( showAddr.getLast() == 0 )
   {
@@ -708,7 +705,7 @@ if( showAddr.getLast() == 0 )
   }
 
 StIO::putS( "Server IP address:" );
-StIO::putStr( showAddr );
+StIO::putCharBuf( showAddr );
 StIO::putS( " " );
 
 // The stats and hacking info for disallowed
@@ -801,7 +798,7 @@ return false;
 
 SocketCpp SocketsApi::acceptConnect(
                          SocketCpp servSock,
-                         Str& fromAddress )
+                         CharBuf& fromAddress )
 {
 fromAddress.clear();
 
@@ -843,15 +840,15 @@ struct sockaddr* sa =
 // Pass an index of IP addresses to deny.
 // Make a fast index of addresses.
 
-Str showAddr = GetAddress::getAddressStr( sa );
-if( showAddr.getLast() == 0 )
+CharBuf showAddr;
+if( !GetAddress::getAddressBuf( showAddr, sa ))
   {
   StIO::putS( "No IP address for the server." );
   return InvalSock;
   }
 
 StIO::putS( "Accepted IP address:" );
-StIO::putStr( showAddr );
+StIO::putCharBuf( showAddr );
 StIO::putS( " " );
 
 fromAddress.copy( showAddr );
@@ -875,7 +872,7 @@ if( sendToSock == INVALID_SOCKET )
 const Int32 howMany = sendBuf.getLast();
 
 OpenCharArray bufferAr;
-sendBuf.copyToOpenCharArray( bufferAr );
+sendBuf.copyToOpenCharArrayNoNull( bufferAr );
 
 // Memory::copy()
 for( Int32 count = 0; count < howMany; count++ )
@@ -903,61 +900,6 @@ if( result == SOCKET_ERROR )
 // How many did it actually send?
 return result;
 }
-
-
-bool SocketsApi::sendStr(
-                   const SocketCpp sendToSock,
-                   const Str& sendStr )
-{
-if( sendToSock == INVALID_SOCKET )
-  {
-  StIO::putS( "sendStr() sendToSock is invalid." );
-  return false;
-  }
-
-// This does not include that final zero
-// character.
-const Int32 howMany = sendStr.getLast();
-
-OpenCharArray bufferAr;
-sendStr.copyToOpenArray( bufferAr );
-
-// Memory::copy()
-for( Int32 count = 0; count < howMany; count++ )
-  bufferAr.setC( count, sendStr.getC( count ));
-
-// Telling it to send the characters of
-// the string without the final zero character.
-
-Int32 result = send( sendToSock,
-                     bufferAr.cArray,
-                     howMany, // Not the zero.
-                     0 );
-
-// I presume send() is done with the buffer.
-// It's about to go out of scope.
-
-if( result == SOCKET_ERROR )
-  {
-  StIO::putS( "SocketsApi sendBuf() error." );
-  Int32 error = WSAGetLastError();
-  StIO::printF( "Error is: " );
-  StIO::printFD( error );
-  StIO::printF( "\n" );
-  closesocket( sendToSock );
-  return false;
-  }
-
-if( howMany != result )
-  {
-  // It couldn't send the whole string.
-  StIO::putS( "SocketsApi sendStr not complete." );
-  return false;
-  }
-
-return true;
-}
-
 
 
 

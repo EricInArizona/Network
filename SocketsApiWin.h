@@ -23,7 +23,6 @@
 #include "../CppBase/BasicTypes.h"
 #include "../CppBase/CharBuf.h"
 #include "../CppBase/OpenCharArray.h"
-#include "../CppBase/Str.h"
 // #include "../CppBase/RangeC.h"
 
 // This can't include things like SrvClient.h
@@ -50,25 +49,25 @@ class SocketsApi
   static void closeSocket( SocketCpp toClose );
   static void shutdownRead( SocketCpp toClose );
 
-  static bool setNonBlocking( const SocketCpp toSet );
+  static bool setNonBlocking(
+                         const SocketCpp toSet );
 
-  static SocketCpp connectClient( const Str& domain,
-                           const Str& port );
+  static SocketCpp connectClient(
+                           const char* domain,
+                           const char* port );
 
   static SocketCpp openServer(
                       const char* ipAddress,
                       const char* port,
                       const bool useIPv4Only );
 
-  static SocketCpp acceptConnect( SocketCpp servSock,
-                           Str& fromAddress );
+  static SocketCpp acceptConnect(
+                          SocketCpp servSock,
+                          CharBuf& fromAddress );
 
   static Int32 sendCharBuf(
                      const SocketCpp sendToSock,
                      const CharBuf& sendBuf );
-
-  static bool sendStr( const SocketCpp sendToSock,
-                       const Str& sendStr );
 
   static bool receiveCharBuf(
                        const SocketCpp recSock,

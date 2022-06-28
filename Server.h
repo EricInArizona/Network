@@ -16,7 +16,6 @@
 #include "SocketsApi.h"
 #include "SrvClient.h"
 #include "SClientArray.h"
-#include "../CppBase/Str.h"
 
 
 class Server

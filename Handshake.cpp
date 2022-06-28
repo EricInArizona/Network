@@ -18,18 +18,19 @@ void Handshake::makeClientHello(
 const Int32 length = 50; // ??
 msgAr.setSize( length );
 
-msgAr.setC( 0, ClientHello );
+msgAr.setU8( 0, ClientHello );
 
 // Big endian.
-msgAr.setC( 1, Casting::i32ToByte(
+msgAr.setU8( 1, Casting::i32ToU8(
                                  length >> 16 ));
-msgAr.setC( 2, Casting::i32ToByte(
+msgAr.setU8( 2, Casting::i32ToU8(
                                  length >> 8 ));
-msgAr.setC( 3, Casting::i32ToByte(
+msgAr.setU8( 3, Casting::i32ToU8(
                                  length ));
 
-/*
 
+/*
+msgAr.setU8( 3,
     ToSendBuf[9] = 3;   // Version Major
     ToSendBuf[10] = 3;  // Version Minor
 
@@ -73,7 +74,20 @@ msgAr.setC( 3, Casting::i32ToByte(
     ToSendBuf[50] = 1; // Compression Methods Length
     ToSendBuf[51] = 0; // Compression Method is null.
 
-    // This message has no extensions, so that's all there is to send.
+    // Extensions go here.
+    // On the server side it has to allow unknown
+    // extensions to be sent so it can ignore them
+    // If they are a reasonable length.
+
+      Extension types.  Two bytes.
+      enum {
+          server_name(0), max_fragment_length(1),
+          client_certificate_url(2),
+          trusted_ca_keys(3),
+          truncated_hmac(4), status_request(5),
+         (65535)
+      } ExtensionType;
+
     return CustomerTLS.SendBuffer( ToSendBuf );
 
     }
