@@ -12,15 +12,6 @@
 #include "../CppBase/CharArray.h"
 
 
-// RFC 8446 - The Transport Layer Security
-// (TLS) Protocol Version 1.3
-
-
-// DH is not ephemeral
-
-// DHE is for ephemeral Diffie-Hellman.
-// DH is not ephemeral.
-
 
 class Handshake
   {
